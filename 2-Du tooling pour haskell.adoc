@@ -1,0 +1,37 @@
+= Du tooling pour haskell
+:icons: font
+
+== Cabal
+
+
+[NOTE]
+====
+* y passer vite fait
+====
+
+== Stack
+
+[NOTE]
+====
+* parler du lts et de la compatibilité des dépendances
+* montrer les commandes : setup, build, exec
+====
+
+== Où l'on commence à modulariser
+
+[NOTE]
+====
+. donner un exemple simple d'un module : Calculatrice
+. le builder
+. expliquer l'erreur
+. montrer comment la corriger
+. introduire hpack
+====
+
+== Où l'on commence à tester
+
+[NOTE]
+====
+* importer hspec
+* tester le module
+====

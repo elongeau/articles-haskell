@@ -4,6 +4,7 @@
 
 * [ ] lien vers la doc
 * [ ] précisez d'utiliser l'install full
+* [ ] passez vite fait sur stack
 
 == Un peu d'histoire
 
