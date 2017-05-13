@@ -1,0 +1,127 @@
+=== Gérer les paramètres
+:2c: ::
+
+Pour exploiter les paramètres d'une fonction,
+Haskell propose le *pattern matching*,
+il s'agit de faire correspondre votre paramètre (*matching*) à un *pattern*.
+Par exemple:
+
+[source, haskell,linenums]
+----
+include::pattern-matching1.hs[]
+
+# dans le repl
+*Main> f Imperative Java
+"Je code du Java avec le style Imperatif"
+*Main> f Imperative Scala
+"Je code du Scala avec le style Imperatif"
+*Main> f Functional Java
+"J'aime le fonctionnel, je code dans tous les languages"
+*Main> f Functional Haskell
+"J'aime le fonctionnel, je code dans tous les languages"
+*Main> f Imperative Haskell
+"Je ne pense pas que ce soit possible"
+----
+
+<1> on _match_ nos 2 paramètres sur les valeurs `Imperative` et `Java`
+<2> idem mais sur `Imperative` et `Scala`
+<3> on utilise ici le *wildcard* ``_`` qui signifie n'importe quelle valeur
+<4> on utilise deux fois le *wildcard* pour indiquer que l'on ne se préoccupe pas des valeurs *et* qu'on ne souhaite pas non plus les utiliser
+
+Vous remarquerez également que l'on repète le nom de la fonction à chaque ligne. 
+Pour information Haskell propose la notation `case <valeur> of` mais l'utiliser directement sur les paramètres est tellement plus pratique que l'on ne pas s'en priver.
+
+[NOTE]
+le mot clé `data` permet de définir des types.
+Ici on se contente de déclarer des valeurs singleton pour `Developer` et `Language`.
+
+On voit tout de suite que le pattern matching permet facilement de séparer différents cas mais une limite se profile à l'horizon,
+comment faire pour traiter les cas où l'on ne se préoccupe pas du pattern mais de la valeur en elle même ?
+Par exemple les cas de comparaison de valeur (comme les `Int` avec supérieur/inférieur) ?
+On pourrait tout à fait matcher la valeur et traiter les différentes conditions avec un `if` mais comme vous vous en doutez je ne vous en aurais pas parlez si Haskell ne proposait pas une solution.
+Il s'agit des *guards* : 
+
+[source,haskell,linenums]
+----
+include::guards.hs[]
+
+# dans le repl
+Main> greaterThan7 8
+"Yeah! plus grand que 7"
+Main> greaterThan7 7
+"juste 7"
+Main> greaterThan7 6
+"moins de 7"
+----
+
+N'oubliez pas également d'être exhaustif dans vos matching, tout oubli sera sanctionné par une exception:
+
+[source,haskell,linenums]
+----
+Prelude> demo "foo" = 42
+Prelude> demo "foo"
+42
+Prelude> demo ""
+*** Exception: <interactive>:1:1-15: Non-exhaustive patterns in function demo
+----
+
+Pour finir sur le pattern matching, on va voir comment déconstruire un pattern. 
+Dans notre exemple on va utiliser les listes.
+
+[NOTE]
+.Aparté sur les listes
+====
+Pour créer une liste on a plusieurs solutions: 
+
+* utiliser `[]`, par exemple `[1,2,3,4]`
+* utiliser la fonction `:` comme ceci `1 : 2 : 3 :  4 : []` (`[]` étant la une liste vide)
+
+La fonction `:` a pour type ``(:) {2c} a -> [a] -> [a]``,
+elle ajoute une valeur à une liste contenant le même type d'élément.
+====
+
+[source,haskell,linenums]
+----
+include::pattern-matching-deconstruting.hs[]
+
+# dans le repl
+Main> lenght []
+0
+Main> lenght ["hello"]
+1
+Main> lenght ["hello", "world"]
+2
+----
+
+<1> la notation `[String]` indique une liste de `String` avec `[]` comme constructeur
+<2> on match sur la liste vide `[]` qui a une taille de 0
+<3> on va s'attarder un peu plus longtemps sur cette ligne.
+
+Première chose, le pattern `(x:xs)`, `x:xs` veut dire un élément `x` suivi d'une liste,
+le pattern déconstruit alors la liste initiale en un élément suivi d'une autre liste contenant le reste (ou vide si la liste initiale ne contient qu'un élément).
+
+La ligne `lenght (x:xs) = 1 + lenght xs` veut alors dire que la taille d'une liste non vide est `1` plus la taille du reste de la liste.
+On appel alors récursivemment notre fonction `lenght` sur `xs` pour connaître sa taille jusqu'a tombé sur la liste vide `[]`.
+
+Si on est perfectionniste, on peut changer le pattern pour ceci `(_:xs)`,
+on utilise le wildcard pour dire que liste doit contenir au moins un élément dont on ne veut pas savoir sa valeur.
+
+Mais la déconstruction de pattern ne s'applique pas qu'au liste,
+on peut également l'utiliser sur nos propres types:
+
+[source,haskell,linenums]
+----
+include::pattern-matching-custom.hs[]
+
+# dans le repl
+Main> customMatch (StringHolder "foo")
+"foo"
+Main> customMatch (IntWrapper 42)
+"contains 42"
+----
+
+Rien de bien surprenant ici.
+
+On vient de voir les bases du **pattern matching**, 
+quand on commence à l'utiliser on devient vite accro (l'auteur décline toute responsabilité en cas de dépendance) tellement c'est simple et pratique.
+Attention toutefois à l'ordre des patterns, c'est le premier qui correspond qui sera utilisé.

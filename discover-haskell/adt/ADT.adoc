@@ -1,0 +1,92 @@
+== Créer nos propres types
+
+Tout simplement comme ceci :
+
+[source, haskell,linenums]
+....
+Prelude> data Person = Person String String deriving Show -- <1>
+Prelude> print (Person "John" "Doe") -- <2>
+Person "John" "Doe"
+....
+
+<1> Donc nous avons déclaré un nouveau type `Person` avec `data`,
+<2> on peut alors créer une instance et l'afficher
+
+TIP: la partie `deriving Show` permet de rendre notre type affichable, comme un `toString` en Java.
+
+Par contre vous remarquerez surement que nous n'avons pas nommé les propriétés du type `Person`,
+ce qui n'est pas forcément pratique, heureusement on peut y faire quelque chose :
+
+[source, haskell,linenums]
+....
+Prelude> data Person = Person { firstname :: String, lastname :: String } deriving Show
+Prelude> print (Person "Jane" "Doe") -- <1>
+Person {firstname = "Jane", lastname = "Doe"}
+*Main> firstname p -- <2>
+"John"
+*Main> p2 = p { firstname = "Jane" } -- <3>
+Person {firstname = "Jane", lastname = "Doe"}
+....
+
+<1> On crée une `Person` comme précédemment
+<2> Ici on utilise `firstname` comme une fonction pour obtenir la propriété du même nom
+<3> Là on créer une nouvelle `Person` en remplaçant le prénom, `p` ne change pas
+
+Une autre possibilité est de pouvoir définir plusieurs _implémentation_ d'un même type:
+
+[source, haskell,linenums]
+....
+include::adt2.hs[]
+....
+
+<1> un type `Fruit` avec 3 constructeurs, on peut se dire que c'est un `enum` de Java
+<2> un type `Movie` : chaque constructeur à un ou plusieurs paramètres
+
+[source, haskell,linenums]
+....
+*Main> main
+Apple
+ScienceFiction {title = "Star Wars"}
+....
+
+=== ça `match` encore et toujours
+
+Un point intéressant est qu'on peut __pattern match__er nos types :
+
+[source, haskell,linenums]
+....
+include::adt-pattern1.hs[]
+....
+
+On déconstruit notre type pour :
+
+. savoir quelle action produire
+. extraire ses propriétés et les utiliser
+
+[source, haskell,linenums]
+....
+*Main> test (ScienceFiction "Starwars")
+"The best movie ever is Starwars"
+*Main> test (Comedy ["Jim Carrey", "Mike Myers"])
+"a comedy movie with [\"Jim Carrey\",\"Mike Myers\"]"
+....
+
+=== Tout est fonction
+Si vous essayer de voir le type de vos type, vous allez avoir un résultat _intéressant_.
+
+[source,haskell,linenums]
+....
+*Main> :t ScienceFiction
+ScienceFiction :: String -> Movie -- <1>
+*Main> :t title
+title :: Movie -> String -- <2>
+*Main> sf = ScienceFiction "StarWars"
+*Main> actors sf -- <3>
+*** Exception: No match in record selector actors
+....
+
+<1> tiens donc, `ScienceFiction` est une fonction qui retourne un `Movie`.
+<2> et `title` aussi, mais pour extraire une `String`
+<3> par contre on ne peut pas faire n'importe, comme extraire les acteurs sur un film de SF
+
+En fait `Movie` est un *type* et `ScienceFiction` et `Comedy` en sont les *constructeur de type*.

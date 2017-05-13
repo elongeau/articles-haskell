@@ -1,0 +1,60 @@
+== Il est entré par ici, il sortira par là
+
+C'est bien beau tout ça, mais ne serait-il pas temps de sortir du REPL ?
+Alors allons-y avec le légendaire *Hello World* :
+
+[source, haskell,linenums]
+.Hello.hs
+....
+include::Hello.hs[]
+....
+
+Pour l'éxécuter, rien de plus simple qu'un `runHaskell Hello.hs` depuis votre shell favori.
+On affiche simplement une chaine de caractère avec `putStrLn`.
+On va maintenant passer au niveau suivant : interragir avec notre programme.
+
+[source, haskell,linenums]
+.HelloWho.hs
+....
+include::HelloWho.hs[]
+....
+<1> On récupère et assigne la saisie à `name`.
+<2> On affiche les salutations en concaténant `"Hello "` à `name` avec `++`.
+
+Une nouvelle fois `runHaskell HelloWho.hs`,
+une ligne vide apparait, c'est le moment de saisir qui sera salué, pour moi ce sera **Manu**.
+
+[source,linenums]
+.Résultat
+....
+$ runHaskell HelloWho.hs
+Manu
+Hello Manu !
+....
+
+On utilise un language fonctionnel tout de même, alors qu'est ce qu'on veut
+DES FONCTIONS !!!!!!!!!!!!!
+
+[source, haskell,linenums,subs="verbatim"]
+.HelloWhoFun.hs
+....
+include::HelloWhoFun.hs[]
+....
+
+<1> c'est une fonction prenant en paramètre une `String` et retournant une action `IO`
+
+=== Le type `IO`
+
+Comme on a pu le constater, à chaque fois qu'on a voulu interragir avec le monde extérieur on a du utiliser une fonction retourant un type `IO`,
+par exemple notre fonction `main` à le type `IO ()` pour dénoter que c'est une fonction ne retournant aucune valeur (le `()`) et ayant des effets (`IO`). Et `getLine` a le type `IO String`, soit un effet retournant une `String`.
+
+TIP: `()` est l'équivalent du `void` en Java, on l'appel `unit`.
+
+En fait le type `IO` est un type polymorphique, tout comme la liste Haskell, qui a de plus un effet sur ou en provenance du monde extérieur.
+Donc quand vous ferez un traitement impliquant des IO, celles-ci ne seront qu'exécutés qu'a la toute fin, d'une certaine manière renvoyé une `IO` c'est renvoyé la description d'un effet.
+
+[NOTE]
+.Haskell est fainéant
+Cette approche est qualifiée de *lazy*, et ne se limite pas au IO, toute expression sera évaluée au dernier moment et uniquement si nécessaire.
+
+Il faut également savoir que vous n'avez pas la capacité d'évaluer une `IO`, seul le compilateur sait le faire.

@@ -1,0 +1,22 @@
+= Introduction à Haskell
+:source-highlighter: pygments
+:icons: font
+:source-language: haskell
+
+include::intro/intro.adoc[]
+
+include::repl/repl.adoc[]
+
+include::function/function.adoc[]
+
+include::function/dans-la-fonction.adoc[]
+
+include::syntax/control.adoc[]
+
+include::list/list.adoc[]
+
+include::io/io.adoc[]
+
+include::adt/ADT.adoc[]
+
+include::conclusion.adoc[]
