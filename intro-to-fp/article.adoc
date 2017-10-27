@@ -5,4 +5,8 @@ si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais la programmation fonctionnelle ne se résume pas à des lambdas (et Java reste fondamentalement un language orienté objet).
 Donc partons à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
 
+== REPL ?
 
+== Pureté
+
+== Composition
