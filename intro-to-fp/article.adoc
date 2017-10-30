@@ -1,7 +1,12 @@
 = Introduction à la programmation fonctionnelle (avec Haskell)
+:source-highlighter: pygments
+:icons: font
+:source-language: haskell
 
 .idée
 ====
+* la fonction est un mapping entre un ensemble de valeur
+* currying
 * la fonction est une valeur comme une autre
 * dans `a -> b`, `a` peut être une fonction
 * jeu pour déterminer ce que fait une fonction à partir de sa signature
@@ -14,6 +19,33 @@ si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais la programmation fonctionnelle ne se résume pas à des lambdas (et Java reste fondamentalement un language orienté objet).
 Donc partons à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
 
+== A l'origine il y avait la fonction
+
+Avant de commencer nos pérégrinations, il faut préciser ce qu'est une fonction.
+Dans le contexte de la programmation fonctionnelle il s'agit d'une opération qui transforme une valeur en une autre et cela sans effet de bord.
+Penchons-nous de plus prêt sur ces 2 concepts.
+
+=== Transformation
+
+Il s'agit ici de de voir une fonction comme un simple *mapping* entre 2 valeurs, par exemple:
+
+[source]
+----
+Prelude> length "hello" -- <1>
+5
+----
+
+<1> pas besoin de parenthèse pour appeler une fonction, on passe les arguments avec des espaces entre chaque
+
+Par exemple la fonction `length` est le mapping entre une chaine de caractère et sa taille.
+
+pureté !== effet
+
+[NOTE]
+On reviendra plus tard sur les fonctions à plusieurs arguments.
+
+
+=== Effet 
 == Pureté 
 
 
