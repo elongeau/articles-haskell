@@ -1,5 +1,6 @@
 = Introduction à la programmation fonctionnelle (avec Haskell)
 :source-highlighter: pygments
+:pygments-style: monokai
 :icons: font
 :source-language: haskell
 
@@ -33,7 +34,7 @@ Prelude> length "hello" -- <1>
 5
 ----
 
-<1> pas besoin de parenthèse pour appeler une fonction, on passe les arguments avec des espaces entre chaque.
+TIP: pas besoin de parenthèse pour appeler une fonction, on passe les arguments avec des espaces entre chaque paramètre.
 
 On peut également voir cette fonction comme une `Map` ayant comme clé une chaine de caratère et comme valeur la taille de la chaine,
 mais comme vous l'imaginez, écrire une fonction comme ceci prendrait un peu de temps donc on fait un calcul plutôt qu'un mapping.
@@ -47,7 +48,44 @@ Une fonction pure c'est une fonction:
 
 Ainsi le résultat d'une fonction pure sera toujours le même pourvu qu'on lui donne les mêmes arguments.
 
-pureté !== effet
+A présent regardons de plus prêt cette notion d'effet, une fonction *pure* ne produit pas d'effet (hormis faire chauffer les processeurs),
+or c'est ce que nous recherchons, nous voulons que le programme interragisse avec le monde pas qu'il vive dans sa bulle sans pouvoir en faire quoi que ce soit.
+
+Définissons dans un premier temps ce qu'est un effet: c'est une interraction avec le monde externe (au programme) :
+
+* soit en lecture: input de l'utilisateur, fichier, base de donnée...
+* soit en écriture : rendre une page web, logger...
+
+Avec Haskell, un effet se traduit avec le type `IO`,
+chaque fois que l'on voudra lire ou modifier quelque chose en dehors du programme on devra wrapper la valeur dans une `IO`.
+
+Trève de bavardage, regardons ça au travers d'un exemple:
+
+[source]
+----
+include::../samples/io.hs[]
+----
+
+<1> `main` est le point de départ de notre programme,
+cette fonction à le type `IO ()` soit une `IO` qui ne contient pas de valeur mais produit juste un effet.
+<2> `getLine` à pour type `IO String`, c'est un effet avec une valeur (ici une `String`), valeur que l'on va attacher à `name`.
+<3> ici pas d'effet, sans rentrer dans le détail de la syntaxe, `let` va nous permettre d'appeler nos fonctions pures
+<4> on affiche le résultat du programme à la console.
+
+Ce simple programme représente la substantifique moëlle d'un programme _fonctionnel_:
+
+. on lit quelque chose du monde extérieure
+. on manipule ces données avec des fonctions pure
+. on produit un effet sur le monde
+
+====
+faire le // avec l'archi hexagonale
+
+faire une note sur les framework qui masque l'IO
+====
+
+== Pureté et Effet
+
 
 [NOTE]
 On reviendra plus tard sur les fonctions à plusieurs arguments.
