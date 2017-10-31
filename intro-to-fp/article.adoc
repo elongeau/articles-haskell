@@ -25,9 +25,7 @@ Avant de commencer nos pérégrinations, il faut préciser ce qu'est une fonctio
 Dans le contexte de la programmation fonctionnelle il s'agit d'une opération qui transforme une valeur en une autre et cela sans effet de bord.
 Penchons-nous de plus prêt sur ces 2 concepts.
 
-=== Transformation
-
-Il s'agit ici de de voir une fonction comme un simple *mapping* entre 2 valeurs, par exemple:
+Prenons par exemple la fonction `length` qui retourne la taille d'une chaine de caractère:
 
 [source]
 ----
@@ -35,9 +33,19 @@ Prelude> length "hello" -- <1>
 5
 ----
 
-<1> pas besoin de parenthèse pour appeler une fonction, on passe les arguments avec des espaces entre chaque
+<1> pas besoin de parenthèse pour appeler une fonction, on passe les arguments avec des espaces entre chaque.
 
-Par exemple la fonction `length` est le mapping entre une chaine de caractère et sa taille.
+On peut également voir cette fonction comme une `Map` ayant comme clé une chaine de caratère et comme valeur la taille de la chaine,
+mais comme vous l'imaginez, écrire une fonction comme ceci prendrait un peu de temps donc on fait un calcul plutôt qu'un mapping.
+
+Pour que ce concept de fonction comme un mapping de valeurs tienne il faut que la fonction soit *pure*.
+Une fonction pure c'est une fonction:
+
+* qui ne dépend pas d'un contexte externe (variable globale, élément aléatoire...).
+* qui ne produit pas d'effet (logger, écrire dans un fichier...).
+* qui ne s'appuie que sur les arguments qu'on lui passe pour produire un résultat.
+
+Ainsi le résultat d'une fonction pure sera toujours le même pourvu qu'on lui donne les mêmes arguments.
 
 pureté !== effet
 
