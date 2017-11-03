@@ -7,12 +7,15 @@
 .idée
 ====
 * la fonction est un mapping entre un ensemble de valeur
-* currying
-* la fonction est une valeur comme une autre
-* dans `a -> b`, `a` peut être une fonction
-* jeu pour déterminer ce que fait une fonction à partir de sa signature
 * opposé pureté et effet (un programme pure ne fait que chauffer le processeur)
 * functor et monade ?
+* tout est valeur :
+** montré un exemple entre la déclaration d'une valeur et d'une fonction
+** la fonction est une valeur comme une autre
+* polymorphisme
+** dans `a -> b`, `a` peut être une fonction
+** jeu pour déterminer ce que fait une fonction à partir de sa signature
+* currying
 ====
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
@@ -20,7 +23,29 @@ si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais la programmation fonctionnelle ne se résume pas à des lambdas (et Java reste fondamentalement un language orienté objet).
 Donc partons à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
 
+== Bon, déjà c'est quoi la __"programmation fonctionnelle"__ ?
+
+Si on va au plus simple, il s'agit de considérer une fonction comme n'importe quelle autre valeur.
+
+[source,haskell]
+----
+include::../samples/fun-as-value.hs[]
+----
+
+Comme on le voit la déclaration d'une _variable_ et d'une fonction sont identique, Haskell ne fait pas la distinction.
+On dit des fonctions qu'elles sont des __citoyennes de première classe__, mais en l'occurrence elles sont au même niveau que n'importe quelle valeur.
+
+Du coup on peut manipuler les fonctions comme le reste:
+
+* les passer en paramètres de fonction
+* les retourner depuis d'autre fonction
+* les composer 
+* les placer dans des collections
 == A l'origine il y avait la fonction
+
+====
+c'est trop long
+====
 
 Avant de commencer nos pérégrinations, il faut préciser ce qu'est une fonction.
 Dans le contexte de la programmation fonctionnelle il s'agit d'une opération qui transforme une valeur en une autre et cela sans effet de bord.
@@ -78,11 +103,8 @@ Ce simple programme représente la substantifique moëlle d'un programme _foncti
 . on manipule ces données avec des fonctions pure
 . on produit un effet sur le monde
 
-====
-faire le // avec l'archi hexagonale
-
-faire une note sur les framework qui masque l'IO
-====
+D'une certaine manière, programmer ainsi est assez similaire à l'http://alistair.cockburn.us/Hexagonal+architecture[architecture hexagonale].
+L'hexagone, c'est les fonctions pures, et les effets tout ce qui en dehors de l'hexagone.
 
 == Pureté et Effet
 
@@ -91,8 +113,29 @@ faire une note sur les framework qui masque l'IO
 On reviendra plus tard sur les fonctions à plusieurs arguments.
 
 
-=== Effet 
-== Pureté 
-
 
 == Composition
+
+== Manipuler des fonctions comme des _variables_
+
+[source,haskell]
+.une liste de fonction
+----
+include::../samples/fun-in-list.hs[]
+----
+ 
+`fs` est une liste de fonction, elle contient la fonction `reverse` qui... renverse une `String`,
+et une lambda (__wouhou !!__) qui préfixe une `String` par `"Hello "`.
+
+On va s'attarder un peu plus longtemps sur `run`.
+`map` prend une liste et applique chaque élément de celle-ci grâce à la fonction en premier argument.
+Dans notre cas c'est `\f -> f "world"`, comme c'est une liste de fonction `f` en est une, elle est alors appliqué sur `"world"`.
+
+[source,haskell]
+.à l'éxécution
+----
+*Main Data.Text> run
+[ "dlrow"
+, "Hello world"
+]
+----
