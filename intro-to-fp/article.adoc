@@ -45,6 +45,28 @@ Du coup on peut manipuler les fonctions comme le reste:
 
 == Fonction de haut niveau
 
+On désigne par cette terminologie les fonctions qui prennent en argument et/ou retournent une fonction.
+par exemple, la fonction `map`:
+
+[source,haskell]
+----
+include::../samples/fun-as-arg.hs[]
+----
+
+Plusieurs éléments de syntaxe sont à l'oeuvre ici, on va d'abord passer rapidement sur eux, dans l'ordre : 
+
+* `Show b` : pour dire que la valeur de type `b` sera convertible en `String`
+* `(a -> b)` : une fonction polymorphique de `a` vers `b`, on l'entoure de parenthèse pour indiquer qu'il s'agit d'une fonction et non pas de deux paramètres distincts
+* `IO ()` : là c'est un peu plus complexe mais il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis)
+* `repeatMe f value count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés
+
+Revenons au sujet principal, 
+
+[source,haskell,linenums]
+----
+connectToDB :: (String -> Connection) -> 
+----
+
 ====
 regrouper ici les fonctions en paramètres et retourner une fonction.
 exemple de passer une connection (warning pour les puristes haskell)
