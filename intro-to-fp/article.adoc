@@ -46,27 +46,92 @@ Du coup on peut manipuler les fonctions comme le reste:
 == Fonction de haut niveau
 
 On désigne par cette terminologie les fonctions qui prennent en argument et/ou retournent une fonction.
-par exemple, la fonction `map`:
+par exemple:
 
 [source,haskell]
 ----
 include::../samples/fun-as-arg.hs[]
 ----
 
-Plusieurs éléments de syntaxe sont à l'oeuvre ici, on va d'abord passer rapidement sur eux, dans l'ordre : 
-
+[NOTE]
+.Un peu de syntaxe
+====
 * `Show b` : pour dire que la valeur de type `b` sera convertible en `String`
-* `(a -> b)` : une fonction polymorphique de `a` vers `b`, on l'entoure de parenthèse pour indiquer qu'il s'agit d'une fonction et non pas de deux paramètres distincts
+* `(a -> b)` : une fonction polymorphique de `a` vers `b` (en java, on parle de _generique_, on écrirait `<A>`), on l'entoure de parenthèse pour indiquer qu'il s'agit d'une fonction et non pas de deux paramètres distincts
 * `IO ()` : là c'est un peu plus complexe mais il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis)
 * `repeatMe f value count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés
+* le `return` n'est pas un mot clé mais une fonction, ici il permet de dire : _ne fais rien_
+====
 
-Revenons au sujet principal, 
+<1> La fonction passé en argument est `f`, on lui passe le second argument, la valeur de type `a` et on affiche le résultat
+<2> on rappelle `repeatMe` avec les mêmes arguments sauf le compteur décrémenté
+<3> si on a fini de répeter on s'arrête
 
-[source,haskell,linenums]
+[source,haskell]
+.à l'éxécution
 ----
-connectToDB :: (String -> Connection) -> 
+λ ❯ repeatMe (\x -> show (2*x)) 1 5
+"2"
+"2"
+"2"
+"2"
+"2"
+----
+Maintenant regardons comment retourner une fonction:
+
+[source,haskell]
+----
+include::../samples/return-fun.hs[]
 ----
 
+On retourne la lambda (une fonction anonyme) `\s -> s ++ (show sum)`
+
+[source,haskell]
+.à l'éxécution
+----
+λ ❯ f = logAdd 1 2
+λ ❯ f "1 + 2 = "
+----
+
+On applique `"1 + 2 = "` à la fonction retourner par `logAdd 1 2`
+
+On peut également se passer de la valeur temporaire `f` et écrire
+
+[source,haskell]
+----
+λ ❯ logAdd 1 2 "1 + 2 = "
+"1 + 2 = 3"
+----
+
+> Etrange, ça ressemble à appliquer des paramètres à une fonction normale
+
+Tout à fait, retourner une fonction revient à avoir une fonction à laquelle on ne donne pas tous ces paramètres. 
+Dans ce cas la valeur retournée est une fonction attendant le reste des paramètres, on peut donc réécrire notre fonction comme ceci:
+
+[source,haskell]
+----
+include::../samples/return-fun-2.hs[]
+----
+
+[source,haskell]
+----
+λ ❯ f = logAdd 1 2
+λ ❯ :t f
+f :: String -> String
+λ ❯ f "1 + 2 = "
+"1 + 2 = 3"
+-- mais on aurait aussi pu faire
+λ ❯ g = logAdd 1
+λ ❯ :t g
+g :: Int -> String -> String
+λ ❯ g 2 "1 + 2 = "
+"1 + 2 = 3"
+----
+
+[TIP]
+Faire `:t` dans le REPL d'Haskell permet d'avoir le type d'une valeur
+
+Le fait d'appliquer partiellement ces paramètres à une fonction s'appelle le **currying**
 ====
 regrouper ici les fonctions en paramètres et retourner une fonction.
 exemple de passer une connection (warning pour les puristes haskell)
@@ -86,7 +151,7 @@ include::../samples/fun-in-list.hs[]
 et une lambda qui préfixe une `String` par `"Hello "`.
 
 On va s'attarder un peu plus longtemps sur `run`.
-`map` prend 2 paramèetres : une fonction et une liste.
+`map` prend 2 paramètres : une fonction et une liste.
 Chaque élément de la liste est fourni comme paramètre à la fonction.
 Dans notre cas la fonction est la lambda `\f -> f "world"`, les éléments de la liste sont des fonctions donc `f` en est une, on lui passe alors le paramètre `"world"`.
 
