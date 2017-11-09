@@ -6,8 +6,10 @@
 
 .idée
 ====
+* https://functional.works-hub.com/blog/Functional-Programming-Jargon[FP Jargon]
 * la fonction est un mapping entre un ensemble de valeur
 * opposé pureté et effet (un programme pure ne fait que chauffer le processeur)
+** en faire une petite bd, "chéri, tu peux monter le chauffage, OK je rajoute des fonctions pure"
 * functor et monade ?
 * tout est valeur :
 ** montré un exemple entre la déclaration d'une valeur et d'une fonction
@@ -17,6 +19,9 @@
 ** jeu pour déterminer ce que fait une fonction à partir de sa signature
 * currying
 ** fonction partiellement appliquée
+* point free programming
+** `f` est une fonction attendant une _signature_, `truc muche` à pour type _un type_ donc c'est bon
+** il faut voir `f` comme une valeur _simple_ (pas de paramètre) qui a pour type toute la signature de la fonction 
 ====
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
