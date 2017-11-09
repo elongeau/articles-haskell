@@ -6,6 +6,7 @@
 
 .idée
 ====
+* introduire le REPL (rapidement)
 * https://functional.works-hub.com/blog/Functional-Programming-Jargon[FP Jargon]
 * la fonction est un mapping entre un ensemble de valeur
 * opposé pureté et effet (un programme pure ne fait que chauffer le processeur)
@@ -17,11 +18,6 @@
 * polymorphisme
 ** dans `a -> b`, `a` peut être une fonction
 ** jeu pour déterminer ce que fait une fonction à partir de sa signature
-* currying
-** fonction partiellement appliquée
-* point free programming
-** `f` est une fonction attendant une _signature_, `truc muche` à pour type _un type_ donc c'est bon
-** il faut voir `f` comme une valeur _simple_ (pas de paramètre) qui a pour type toute la signature de la fonction 
 ====
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
@@ -136,15 +132,62 @@ g :: Int -> String -> String
 [TIP]
 Faire `:t` dans le REPL d'Haskell permet d'avoir le type d'une valeur
 
-Le fait d'appliquer partiellement ces paramètres à une fonction s'appelle le **currying**
-====
-regrouper ici les fonctions en paramètres et retourner une fonction.
-exemple de passer une connection (warning pour les puristes haskell)
-====
+Le fait de séparer les paramètres d'une fonction s'appelle le **currying**,
+l'idée est de considérer que toutes les fonctions n'ont qu'un seul paramètre et retourne une valeur:
+
+* une fonction à 1 paramètre retourne une valeur
+* une fonction à __2 paramètres__ est une fonction à 1 paramètre retournant une fonction à 1 paramètre
+* ...
+* une fonction à __N paramètres__ est une fonction à 1 paramètre retournant une fonction à 1 paramètre retournant une fonction... que retourne une valeur.
+
+[NOTE]
+Avec Haskell le **currying** est natif, il n'y a pas de notion de _groupe_ de paramètres,
+mais pour la compréhension on parlera __des paramètres__ d'une fonction.
+
 
 == Composition
 
+Un des trucs fun de la programmation fonctionnelle c'est de composer des fonctions.
+On prend 2 fonctions et on en fait qu'une seule
+
+[source,haskell,linenums]
+----
+λ ❯ f s = reverse s
+λ ❯ g s = "Hello " ++ s
+λ ❯ h s = (g . f) s
+λ ❯ h "dlrow"
+"Hello world"
+----
+
+Ce nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
+On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`,
+quand celle ci est appliqué:
+
+. elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
+. puis son résultat de type `b` est fourni à la fonction `b -> c` qui produit le résultat final
+
+l'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
+
+[source,haskell]
+----
+include::../samples/compose.hs[]
+
+-- à l'éxécution
+λ ❯ f s = reverse s
+λ ❯ g s = "Hello " ++ s
+λ ❯ (compose g f) "dlrow"
+"Hello world"
+----
+
+Comment fait on pour composer ? 
+On applique nos fonctions dans une lambda :`\x -> g (f x)` et là on retrouve l'ordre de nos paramètres.
+====
+* point free programming
+** `f` est une fonction attendant une _signature_, `truc muche` à pour type _un type_ donc c'est bon
+** il faut voir `f` comme une valeur _simple_ (pas de paramètre) qui a pour type toute la signature de la fonction 
+====
 == Manipuler des fonctions comme des _variables_
+
 
 [source,haskell]
 .une liste de fonction
