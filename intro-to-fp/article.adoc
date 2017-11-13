@@ -13,6 +13,7 @@
 ** en faire une petite bd, "chéri, tu peux monter le chauffage, OK je rajoute des fonctions pure"
 ** une fonction pure ne se repose que sur ces arguments (pas de variable globale en lecture/écriture), pas d'effet
 ** avantages toujours le même résultat pour les mêmes paramètres
+** fonction au sens mathématiques
 * functor et monade ?
 * tout est valeur :
 ** montré un exemple entre la déclaration d'une valeur et d'une fonction
