@@ -1,7 +1,7 @@
-fs :: [(String -> String)]
-fs = [
+listOfFunction :: [(String -> String)]
+listOfFunction = [
     reverse, 
     \s -> "Hello " ++ s
     ]
 
-run = map (\f -> f "world") fs
+run = map (\f -> f "world") listOfFunction

@@ -1,6 +1,6 @@
 = Introduction à la programmation fonctionnelle (avec Haskell)
 :source-highlighter: pygments
-:pygments-style: monokai
+:pygments-style: manni
 :icons: font
 :source-language: haskell
 
@@ -11,6 +11,8 @@
 * la fonction est un mapping entre un ensemble de valeur
 * opposé pureté et effet (un programme pure ne fait que chauffer le processeur)
 ** en faire une petite bd, "chéri, tu peux monter le chauffage, OK je rajoute des fonctions pure"
+** une fonction pure ne se repose que sur ces arguments (pas de variable globale en lecture/écriture), pas d'effet
+** avantages toujours le même résultat pour les mêmes paramètres
 * functor et monade ?
 * tout est valeur :
 ** montré un exemple entre la déclaration d'une valeur et d'une fonction
@@ -57,26 +59,24 @@ include::../samples/fun-as-arg.hs[]
 [NOTE]
 .Un peu de syntaxe
 ====
-* `Show b` : pour dire que la valeur de type `b` sera convertible en `String`
-* `(a -> b)` : une fonction polymorphique de `a` vers `b` (en java, on parle de _generique_, on écrirait `<A>`), on l'entoure de parenthèse pour indiquer qu'il s'agit d'une fonction et non pas de deux paramètres distincts
-* `IO ()` : là c'est un peu plus complexe mais il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis)
-* `repeatMe f value count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés
+* `IO ()` : il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis)
+* `repeatMe f count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés
 * le `return` n'est pas un mot clé mais une fonction, ici il permet de dire : _ne fais rien_
 ====
 
-<1> La fonction passé en argument est `f`, on lui passe le second argument, la valeur de type `a` et on affiche le résultat
+<1> La fonction passé en argument est `f`, on lui passe le compteur et on affiche le résultat
 <2> on rappelle `repeatMe` avec les mêmes arguments sauf le compteur décrémenté
 <3> si on a fini de répeter on s'arrête
 
 [source,haskell]
 .à l'éxécution
 ----
-λ ❯ repeatMe (\x -> show (2*x)) 1 5
+λ> repeatMe (\x -> show x) 5
+"5"
+"4"
+"3"
 "2"
-"2"
-"2"
-"2"
-"2"
+"1"
 ----
 Maintenant regardons comment retourner une fonction:
 
@@ -90,8 +90,8 @@ On retourne la lambda (une fonction anonyme) `\s -> s ++ (show sum)`
 [source,haskell]
 .à l'éxécution
 ----
-λ ❯ f = logAdd 1 2
-λ ❯ f "1 + 2 = "
+λ> f = logAdd 1 2
+λ> f "1 + 2 = "
 ----
 
 On applique `"1 + 2 = "` à la fonction retourner par `logAdd 1 2`
@@ -100,7 +100,7 @@ On peut également se passer de la valeur temporaire `f` et écrire
 
 [source,haskell]
 ----
-λ ❯ logAdd 1 2 "1 + 2 = "
+λ> logAdd 1 2 "1 + 2 = "
 "1 + 2 = 3"
 ----
 
@@ -116,16 +116,16 @@ include::../samples/return-fun-2.hs[]
 
 [source,haskell]
 ----
-λ ❯ f = logAdd 1 2
-λ ❯ :t f
+λ> f = logAdd 1 2
+λ> :t f
 f :: String -> String
-λ ❯ f "1 + 2 = "
+λ> f "1 + 2 = "
 "1 + 2 = 3"
 -- mais on aurait aussi pu faire
-λ ❯ g = logAdd 1
-λ ❯ :t g
+λ> g = logAdd 1
+λ> :t g
 g :: Int -> String -> String
-λ ❯ g 2 "1 + 2 = "
+λ> g 2 "1 + 2 = "
 "1 + 2 = 3"
 ----
 
@@ -152,16 +152,16 @@ On prend 2 fonctions et on en fait qu'une seule
 
 [source,haskell,linenums]
 ----
-λ ❯ f s = reverse s
-λ ❯ g s = "Hello " ++ s
-λ ❯ h s = (g . f) s
-λ ❯ h "dlrow"
+λ> f s = reverse s
+λ> g s = "Hello " ++ s
+λ> h s = (g . f) s
+λ> h "dlrow"
 "Hello world"
 ----
 
 Ce nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
 On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`,
-quand celle ci est appliqué:
+quand celle-ci est appliqué:
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . puis son résultat de type `b` est fourni à la fonction `b -> c` qui produit le résultat final
@@ -173,29 +173,26 @@ l'ordre peut paraître contre intuitif, mais implémentons notre propre fonction
 include::../samples/compose.hs[]
 
 -- à l'éxécution
-λ ❯ f s = reverse s
-λ ❯ g s = "Hello " ++ s
-λ ❯ (compose g f) "dlrow"
+λ> f s = reverse s
+λ> g s = "Hello " ++ s
+λ> (compose g f) "dlrow"
 "Hello world"
 ----
 
 Comment fait on pour composer ? 
-On applique nos fonctions dans une lambda :`\x -> g (f x)` et là on retrouve l'ordre de nos paramètres.
-====
-* point free programming
-** `f` est une fonction attendant une _signature_, `truc muche` à pour type _un type_ donc c'est bon
-** il faut voir `f` comme une valeur _simple_ (pas de paramètre) qui a pour type toute la signature de la fonction 
-====
+On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres.
+
 == Manipuler des fonctions comme des _variables_
 
+Si une fonction est un valeur comme une autre on peut la manipuler comme n'importe quelle autre valeur.
+Par exemple en mettre dans une liste:
 
 [source,haskell]
-.une liste de fonction
 ----
 include::../samples/fun-in-list.hs[]
 ----
  
-`fs` est une liste de fonction, elle contient la fonction `reverse` qui... renverse une `String`,
+`listOfFunction` est une liste de fonction, elle contient la fonction `reverse` qui... renverse une `String`,
 et une lambda qui préfixe une `String` par `"Hello "`.
 
 On va s'attarder un peu plus longtemps sur `run`.
@@ -206,7 +203,7 @@ Dans notre cas la fonction est la lambda `\f -> f "world"`, les éléments de la
 [source,haskell]
 .à l'éxécution
 ----
-*Main Data.Text> run
+λ> run
 [ "dlrow"
 , "Hello world"
 ]

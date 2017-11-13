@@ -1,8 +1,8 @@
-repeatMe :: (Show b) => (a -> b) -> a -> Int -> IO ()
-repeatMe f value count = do 
-    print (f value) -- <1>
+repeatMe :: (Int -> String) -> Int -> IO ()
+repeatMe f count = do 
+    print (f count) -- <1>
     if count > 1
     then
-        repeatMe f value (count - 1) -- <2>
+        repeatMe f (count - 1) -- <2>
     else
         return () -- <3>
