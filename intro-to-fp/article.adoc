@@ -193,13 +193,11 @@ Par exemple en mettre dans une liste:
 include::../samples/fun-in-list.hs[]
 ----
  
-`listOfFunction` est une liste de fonction, elle contient la fonction `reverse` qui... renverse une `String`,
-et une lambda qui préfixe une `String` par `"Hello "`.
-
-On va s'attarder un peu plus longtemps sur `run`.
+Regardons de plus près à la fonction `run`,
 `map` prend 2 paramètres : une fonction et une liste.
 Chaque élément de la liste est fourni comme paramètre à la fonction.
-Dans notre cas la fonction est la lambda `\f -> f "world"`, les éléments de la liste sont des fonctions donc `f` en est une, on lui passe alors le paramètre `"world"`.
+Dans notre cas la fonction est la lambda `\f -> f "world"`,
+les éléments de la liste étant des fonctions, `f` en est une, on lui passe alors le paramètre `"world"`.
 
 [source,haskell]
 .à l'éxécution
