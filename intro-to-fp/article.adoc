@@ -3,6 +3,7 @@
 :pygments-style: manni
 :icons: font
 :source-language: haskell
+:samplesdir: ../samples
 
 .idée
 ====
@@ -34,7 +35,7 @@ Si on va au plus simple, il s'agit de considérer une fonction comme n'importe q
 
 [source,haskell]
 ----
-include::../samples/fun-as-value.hs[]
+include::{samplesdir}/fun-as-value.hs[]
 ----
 
 Comme on le voit la déclaration d'une _variable_ et d'une fonction sont identique, Haskell ne fait pas la distinction.
@@ -54,7 +55,7 @@ par exemple:
 
 [source,haskell]
 ----
-include::../samples/fun-as-arg.hs[]
+include::{samplesdir}/fun-as-arg.hs[]
 ----
 
 [NOTE]
@@ -83,7 +84,7 @@ Maintenant regardons comment retourner une fonction:
 
 [source,haskell]
 ----
-include::../samples/return-fun.hs[]
+include::{samplesdir}/return-fun.hs[]
 ----
 
 On retourne la lambda (une fonction anonyme) `\s -> s ++ (show sum)`
@@ -112,7 +113,7 @@ Dans ce cas la valeur retournée est une fonction attendant le reste des paramè
 
 [source,haskell]
 ----
-include::../samples/return-fun-2.hs[]
+include::{samplesdir}/return-fun-2.hs[]
 ----
 
 [source,haskell]
@@ -171,7 +172,7 @@ l'ordre peut paraître contre intuitif, mais implémentons notre propre fonction
 
 [source,haskell]
 ----
-include::../samples/compose.hs[]
+include::{samplesdir}/compose.hs[]
 
 -- à l'éxécution
 λ> f s = reverse s
@@ -190,7 +191,7 @@ Par exemple en mettre dans une liste:
 
 [source,haskell]
 ----
-include::../samples/fun-in-list.hs[]
+include::{samplesdir}/fun-in-list.hs[]
 ----
  
 Regardons de plus près à la fonction `run`,
@@ -207,3 +208,25 @@ les éléments de la liste étant des fonctions, `f` en est une, on lui passe al
 , "Hello world"
 ]
 ----
+
+== Pureté et effet
+
+Maintenant qu'on sait manipuler des fonctions, attardons nous sur la notion de **pureté**.
+Une fonction pure calcule son résultat uniquement depuis ces arguments et sans produire d'effet.
+Voici quelques exemples de fonction pure et non pure pour vous faire une idée:
+
+[source,haskell,linenums]
+----
+include::{samplesdir}/pure.hs[]
+
+-- exécutons tout ça
+λ> add 1 2
+3
+λ> answer "Answer to the Ultimate Question of Life, the Universe, and Everything"
+"Answer to the Ultimate Question of Life, the Universe, and Everything is 42"
+λ> greetings
+world
+Hello world
+----
+
+
