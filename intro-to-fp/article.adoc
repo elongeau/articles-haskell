@@ -229,6 +229,24 @@ world
 Hello world
 ----
 
+Un autre type d'effet est celui où l'on modifie un des paramètres de la fonction,
+comme avec Haskell tout est immuable je vais vous montrer du code Java:
+
+[source,java]
+----
+int addAndAppend(final List<Integer> ints) {
+    // sommer les éléments de la liste
+    final int res = ints.stream()
+            .mapToInt(Integer::intValue) // converti un Integer en int
+            .sum();
+
+    // ajouter 3 a la liste : on n'est pas pure !!
+    ints.add(3);
+
+    return res;
+}
+----
+
 L'intérêt d'une fonction pure est de tout avoir sous la main, de là découle plusieurs avantages:
 
 * il sera beaucoup plus facile de comprendre ce que fait une fonction pure.
