@@ -251,7 +251,7 @@ L'intérêt d'une fonction pure est de tout avoir sous la main, de là découle 
 
 * il sera beaucoup plus facile de comprendre ce que fait une fonction pure.
 * le résultat dépendant uniquement de ces paramètres, rappeler la même fonction avec les mêmes paramètres produira le même résultat.
-Je vous laisse imaginer les avantages en terme de cache.
+
 
 [NOTE]
 .Un peu d'immuabilité dans vos fonctions pures ?
@@ -260,17 +260,17 @@ Sans trop rentrer dans les détails, il faut que les paramètres de la fonction 
 Si un autre processus modifie un des paramètres pendant son utilisation la fonction ne sera plus très pure.
 ====
 
-Concernant les défauts, il y en a un gros, bien que très utile, une fonction pure ne nous sert pas à grand chose seule.
+Concernant les défauts, il y en a un gros, bien que très utile une fonction pure ne nous sert pas à grand chose seule.
 ====
 bd : faire chauffer le proc avec des fonctions pures
 ====
 
 A un moment donné il faut bien fournir un résultat à l'utilisateur (écrire sur la console par exemple), on parle alors d'**effet**.
-Voyez un effet comme toute interaction de votre programme avec le monde extérieur:
+Voyez un effet comme toute interaction de votre programme avec le monde extérieur: lire depuis la console, lire un fichier, un service REST...
 
-* lire depuis la console
-* lire un fichier
-* un service ReST 
-* ...
+Selon le language l'utilisation des effets sera différente, à titre d'exemple en Haskell une fonction avec un effet utilisera le type `IO`, le système de types nous aide à distinguer les deux.
+Par contre Scala sera plus __permissif__ (pas de critique j'aime beaucoup) et ce sera au développeur de bien séparer les fonctions pure des effets car il n'y aura aucune contrainte au niveau du système de types.
+
+
 
 
