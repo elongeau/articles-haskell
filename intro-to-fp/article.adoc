@@ -113,6 +113,13 @@ f :: String -> String
 g :: Int -> String -> String
 λ> g 2 "1 + 2 = "
 "1 + 2 = 3"
+-- soyons fou : ne donnons aucun paramètre !
+λ> h = logAdd
+-- on a assigné à h la valeur logAdd
+λ> :t h
+h :: Int -> Int -> String -> String
+λ> h 1 2 "1 + 2 = "
+"1 + 2 = 3"
 ----
 
 Le fait de séparer les paramètres d'une fonction s'appelle le **currying**,
@@ -149,6 +156,12 @@ quand celle-ci est appliqué:
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
 
+[TIP]
+====
+Quand vous voyez des `a` et `b` dans la signature d'une fonction ce que celle-ci sera polymorphique (dans le corps de la fonction ce sera une valeur).
+En Java on parlera de __générique__ : `<A>`.
+====
+
 l'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
 
 [source,haskell]
@@ -162,8 +175,8 @@ include::{samplesdir}/compose.hs[]
 "Hello world"
 ----
 
-Comment fait on pour composer ? 
-On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres.
+Dans notre exemple, comment fait on pour composer ? 
+On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres, d'abord `f x` puis son résultat est passé à `g`.
 
 == Manipuler des fonctions comme des _variables_
 
@@ -251,6 +264,15 @@ Voyez un effet comme toute interaction de votre programme avec le monde extérie
 
 Selon le language l'utilisation des effets sera différente, à titre d'exemple en Haskell une fonction avec un effet utilisera le type `IO`, le système de types nous aide à distinguer les deux.
 Par contre Scala sera plus __permissif__ (pas de critique j'aime beaucoup Scala) et ce sera au développeur de bien séparer les fonctions pure des effets car il n'y aura aucune contrainte au niveau du système de types.
+
+[NOTE]
+.vous reprendrez bien un peu d'``IO`` ?
+====
+Le type `IO` représente un effet, c'est un type polymorphique, par exemple la fonction `getLine` qui demande une saisie de l'utilisateur à le type `IO String`, soit un effet qui produira une `String`.
+La fonction `print` retourne une valeur de type `IO ()`, `()` est ici le type qui représente **aucune valeur**, `print` ne produit seulement qu'un effet.
+
+Il y a plein d'autre choses à dire sur `IO` mais ce n'est pas le but de cet article elles seront donc passées sous silence.
+====
 
 == Pour finir
 
