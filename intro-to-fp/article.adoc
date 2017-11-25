@@ -5,14 +5,6 @@
 :source-language: haskell
 :samplesdir: ../samples
 
-.idée
-====
-* introduire le REPL (rapidement)
-* https://functional.works-hub.com/blog/Functional-Programming-Jargon[FP Jargon]
-* la fonction est un mapping entre un ensemble de valeur
-* fonction au sens mathématiques
-====
-
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais la programmation fonctionnelle ne se résume pas à des lambdas (et Java reste fondamentalement un language orienté objet).
