@@ -1,1 +1,1 @@
-include::article.adoc[]
+https://elongeau.github.io/articles-haskell/[à lire ici]
