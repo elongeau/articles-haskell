@@ -3,7 +3,7 @@
 :pygments-style: manni
 :icons: font
 :source-language: haskell
-:samplesdir: ../samples
+:samplesdir: ./samples
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
@@ -247,9 +247,6 @@ Si un autre processus modifie un des paramètres pendant son utilisation la fonc
 ====
 
 Concernant les défauts, il y en a un gros, bien que très utile une fonction pure ne nous sert pas à grand chose seule.
-====
-bd : faire chauffer le proc avec des fonctions pures
-====
 
 A un moment donné il faut bien fournir un résultat à l'utilisateur (écrire sur la console par exemple), on parle alors d'**effet**.
 Voyez un effet comme toute interaction de votre programme avec le monde extérieur: lire depuis la console, lire un fichier, un service REST...
@@ -269,9 +266,9 @@ Il y a plein d'autre choses à dire sur `IO` mais ce n'est pas le but de cet art
 == Pour finir
 
 On a vu que dans un language fonctionnel, une fonction est une valeur comme une autre que l'on peut aisément manipuler. 
-La programmation fonctionnelle est intéressante car on change de paradigme, 
+La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
 au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
 
-
-
-
+Je vous encourage vivement à apprendre la programmation fonctionnelle (avec Haskell en particulier, car vous serez contraint d'utiliser ce paradigme),
+pour vous améliorez en tant que développeur.
+Même si je continues à coder en Java au jour le jour, j'essaye de rendre mes fonctions le plus pure possible pour séparer aisément les calculs des effets.
