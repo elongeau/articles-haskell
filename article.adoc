@@ -7,8 +7,8 @@
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
-Mais la programmation fonctionnelle ne se résume pas à des lambdas (et Java reste fondamentalement un language orienté objet).
-Donc partons à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
+Mais Java (entre autre) reste attaché au paradigme objet.
+Partons donc à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
 
 == Bon, déjà c'est quoi la __"programmation fonctionnelle"__ ?
 
@@ -28,6 +28,27 @@ Du coup on peut manipuler les fonctions comme le reste:
 * les retourner depuis d'autre fonction
 * les composer 
 * les placer dans des collections
+
+
+.Aparté sur les lambdas
+[NOTE]
+====
+Si on veut aller plus on peut considérer que n'importe quelle fonction est une lambda (lambda = fonction anonyme).
+En l'occurrence pour Haskell la notation suivante:
+
+[source,haskell]
+----
+-- double le nombre passé en paramètre
+double x = x + x
+----
+
+Est juste du sucre syntaxique pour cette lambda:
+[source,haskell]
+----
+-- idem mais avec moins de caractère
+double = \x -> x + x
+----
+====
 
 == Fonction de haut niveau
 
@@ -214,6 +235,14 @@ include::{samplesdir}/pure.hs[]
 world
 Hello world
 ----
+
+[TIP]
+====
+[quote,, 'https://fr.wikipedia.org/wiki/Transparence_r%C3%A9f%C3%A9rentielle[wiki]']
+La transparence référentielle est une propriété des expressions d'un langage de programmation qui fait qu'une expression peut être remplacée par son résultat sans changer le comportement du programme.
+
+Dans notre cas l'expression `i` vaut `42` (et ça ne changera pas) on peut donc mettre `42` partout où l'on trouve `i` sans affecter le programme.
+====
 
 Un autre type d'effet est celui où l'on modifie un des paramètres de la fonction,
 comme avec Haskell tout est immuable je vais vous montrer du code Java:
