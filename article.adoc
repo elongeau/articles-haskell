@@ -8,7 +8,7 @@
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais Java (entre autre) reste attaché au paradigme objet.
-Partons donc à la découverte de la programmation fonctionnelle avec un language qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
+Partons donc à la découverte de la programmation fonctionnelle avec un langage qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
 
 == Bon, déjà c'est quoi la __"programmation fonctionnelle"__ ?
 
@@ -19,36 +19,35 @@ Si on va au plus simple, il s'agit de considérer une fonction comme n'importe q
 include::{samplesdir}/fun-as-value.hs[]
 ----
 
-Comme on le voit la déclaration d'une _variable_ et d'une fonction sont identique, Haskell ne fait pas la distinction.
-On dit des fonctions qu'elles sont des __citoyennes de première classe__, mais en l'occurrence elles sont au même niveau que n'importe quelle valeur.
-
-Du coup on peut manipuler les fonctions comme le reste:
-
-* les passer en paramètres de fonction
-* les retourner depuis d'autre fonction
-* les composer 
-* les placer dans des collections
-
-
-.Aparté sur les lambdas
 [NOTE]
+.Valeur vs variable
 ====
-Si on veut aller plus on peut considérer que n'importe quelle fonction est une lambda (lambda = fonction anonyme).
-En l'occurrence pour Haskell la notation suivante:
+Lorsque que l'on travail avec un language prônant l'immutabilité il vaut mieux parler de valeur plutôt que de variable, 
+car la définition même de variable implique que quelque chose change, ce qui est en contradiction avec l'immutabilité.
+Donc par la suite je vais parler de valeur.
+====
+
+Comme on le voit la déclaration d'une valeur et d'une fonction sont identique, Haskell ne fait pas la distinction, en fait une fonction est une valeur.
+On dit alors des fonctions qu'elles sont des __first class citizen__, car tout ce qu'on peut faire avec un `Int` ou une `String` on peut le faire avec une fonction,
+et c'est de ça dont on va parler par la suite mais avant:
+
+
+== Aparté sur les lambdas
+
+C'est quoi une lambda ? c'est une fonction anonyme tout simplement.
+En Haskell on les écrit ainsi ``\x y -> x + y``.
+
+Si vous voulez utiliser la même lambda plusieurs fois il vous faudra la nommée: ``add = \x y -> x + y``, 
+vous pourrez alors utiliser `add` plutôt que re-écrire la lambda partout.
+
+D'ailleurs Haskell propose du __sucre syntaxique__ pour cela : 
 
 [source,haskell]
 ----
--- double le nombre passé en paramètre
-double x = x + x
+add x y = x + y
 ----
 
-Est juste du sucre syntaxique pour cette lambda:
-[source,haskell]
-----
--- idem mais avec moins de caractère
-double = \x -> x + x
-----
-====
+Bravo on vient de montrer qu'une fonction et une lambda c'est la même chose, on pourra d'ailleurs remplacer l'une par l'autre sans soucis.
 
 == Fonction de haut niveau
 
@@ -65,7 +64,6 @@ include::{samplesdir}/fun-as-arg.hs[]
 ====
 * `IO ()` : il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis).
 * `repeatMe f count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés.
-* le `return` n'est pas un mot clé mais une fonction, ici il permet de dire : _ne fais rien_, car `()` est la valeur __vide__.
 ====
 
 [source,haskell]
@@ -171,7 +169,7 @@ quand celle-ci est appliqué:
 
 [TIP]
 ====
-Quand vous voyez des `a` et `b` dans la signature d'une fonction ce que celle-ci sera polymorphique (dans le corps de la fonction ce sera une valeur).
+Quand vous voyez des `a` et `b` dans la signature d'une fonction c'est que celle-ci est polymorphique (dans le corps de la fonction ce sera une valeur).
 En Java on parlera de __générique__ : `<A>`.
 ====
 
@@ -191,7 +189,7 @@ include::{samplesdir}/compose.hs[]
 Dans notre exemple, comment fait on pour composer ? 
 On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres, d'abord `f x` puis son résultat est passé à `g`.
 
-== Manipuler des fonctions comme des _variables_
+== Manipuler des fonctions comme n'importe quelle autre valeur
 
 Si une fonction est une valeur comme une autre on peut la manipuler comme n'importe quelle autre valeur.
 Par exemple en mettre dans une liste:
@@ -255,7 +253,7 @@ int addAndAppend(final List<Integer> ints) {
             .mapToInt(Integer::intValue) // converti un Integer en int
             .sum();
 
-    // ajouter 3 a la liste : on n'est pas pure !!
+    // ajouter 3 a la liste : on n'est pas pur !!
     ints.add(3);
 
     return res;
@@ -278,9 +276,9 @@ Si un autre processus modifie un des paramètres pendant son utilisation la fonc
 Concernant les défauts, il y en a un gros, bien que très utile une fonction pure ne nous sert pas à grand chose seule.
 
 A un moment donné il faut bien fournir un résultat à l'utilisateur (écrire sur la console par exemple), on parle alors d'**effet**.
-Voyez un effet comme toute interaction de votre programme avec le monde extérieur: lire depuis la console, lire un fichier, un service REST...
+Voyez un effet comme toute interaction de votre programme avec le monde extérieur: lire depuis la console, un service REST...
 
-Selon le language l'utilisation des effets sera différente, à titre d'exemple en Haskell une fonction avec un effet utilisera le type `IO`, le système de types nous aide à distinguer les deux.
+Selon le langage l'utilisation des effets sera différente, à titre d'exemple en Haskell une fonction avec un effet utilisera le type `IO`, le système de types nous aide à distinguer les deux.
 Par contre Scala sera plus __permissif__ (pas de critique j'aime beaucoup Scala) et ce sera au développeur de bien séparer les fonctions pure des effets car il n'y aura aucune contrainte au niveau du système de types.
 
 [NOTE]
@@ -294,7 +292,7 @@ Il y a plein d'autre choses à dire sur `IO` mais ce n'est pas le but de cet art
 
 == Pour finir
 
-On a vu que dans un language fonctionnel, une fonction est une valeur comme une autre que l'on peut aisément manipuler. 
+On a vu que dans un langage fonctionnel, une fonction est une valeur comme une autre que l'on peut aisément manipuler. 
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
 au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
 
