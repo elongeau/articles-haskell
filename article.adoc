@@ -12,7 +12,13 @@ Donc partons à l'aventure au pays des fonctions et des lambdas.
 
 == Dis papa c'est quoi une lambda ?
 
-Une lambda c'est une fonction anonyme, 
+Une lambda c'est une fonction anonyme, ça passera mieux avec un exemple:
+
+[source,java]
+----
+include::{samplesdir}/Lambda.java[]
+----
+
 
 == les fonctions en Haskell
 
