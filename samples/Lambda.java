@@ -1,10 +1,10 @@
 public class Lambda {
     public static void main(String... args) {
-        final String str = Stream.of("h","e","l","l","o"," ","l","a","m","b","d","a")
-                .reduce((s, s2) -> s + s2) // (1)
-                .orElse("");
+        final List<Integer> res = Stream.of(1, 2, 3, 4) //
+                .map(x -> x * 2) //
+                .collect(Collectors.toList());
 
-        System.out.println(str);
+        System.out.println(res);
 
     }
 }

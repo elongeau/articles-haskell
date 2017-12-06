@@ -12,15 +12,36 @@ Donc partons à l'aventure au pays des fonctions et des lambdas.
 
 == Dis papa c'est quoi une lambda ?
 
-Une lambda c'est une fonction anonyme, ça passera mieux avec un exemple:
+Une lambda c'est tout simplement une fonction anonyme, ça passera mieux avec un exemple:
 
 [source,java]
 ----
 include::{samplesdir}/Lambda.java[]
 ----
 
+Ici on utilise l'API Stream de Java 8 pour doubler chaque nombre du `Stream`.
+`map` applique successivement la lambda `x -> x * 2` à chaque élément du `Stream`.
+
+Ce que nous apporte l'utilisation d'une lambda c'est la concision, la lecture du code nous informe tout de suite de ce que l'on veut faire : multiplier un nombre par 2.
+Comment est appliqué la lambda dépendra de l'appelant (ici `map`).
+
+=== Et les closures dans tout ça ?
+
+Une closure ressemble à une lambda mais elle embarque en plus un *contexte*:
+
+[source,java]
+----
+include::{samplesdir}/Closure.java[]
+----
+
+Avez vous devinez pourquoi `x -> x + i` est un closure ?
+Elle n'a pas de nom comme une lambda mais d'où vient le `i` ?
+De la méthode `add`, la variable `i` fait parti du contexte dont on parlait. 
+Lorsque la fonction `x -> x + i` s'exécutera, le `i` viendra du contexte de la closure.
 
 == les fonctions en Haskell
+
+On va maintenant 
 
 === quelques éléments de grammaire Haskell (par exemple les signatures de type)
 
