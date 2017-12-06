@@ -4,6 +4,7 @@
 :icons: font
 :source-language: haskell
 :samplesdir: ./samples
+:2c: ::
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
@@ -39,17 +40,115 @@ Elle n'a pas de nom comme une lambda mais d'où vient le `i` ?
 De la méthode `add`, la variable `i` fait parti du contexte dont on parlait. 
 Lorsque la fonction `x -> x + i` s'exécutera, le `i` viendra du contexte de la closure.
 
-== les fonctions en Haskell
+== Les fonctions en Haskell
 
-On va maintenant 
+On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
+Pourquoi me direz-vous ?
+Et bien parce que Haskell est un langage strictement fonctionnel et sa syntaxe permet des petits _tour de passe-passe_ plus à même d'exposer mon propos.
 
-=== quelques éléments de grammaire Haskell (par exemple les signatures de type)
+Donc avant de commencer, une petite leçon d'Haskell :
 
-== correspondance entre fonction “normale” et “lambda”
+On ne parle pas de variable en Haskell car tout est immutable, on utilisera plutôt le terme *valeur*.
+
+Déclarer une valeur ou une fonction se fait comme ceci:
+
+[source,haskell]
+----
+include::{samplesdir}/fun-as-value.hs[]
+----
+
+La première ligne de chaque bloc représente la signature sous la forme ``<nom> {2c} <type>``.
+La suivante assigne une _expression_ à un _nom_ (`42` à `i` et `lenght s` à `f`). 
+Remarquez comment la syntaxe Haskell ne distingue pas une valeur d'une fonction, ceci nous indique quelque chose.
+Dans un langage fonctionnel, une fonction est une valeur, c'est le type de la valeur qui déterminera son usage et pas sa nature (_variable_ ou fonction).
+
+Et pour utiliser tout ça
+[source,haskell]
+----
+λ> i
+42
+λ> f "Hello"
+5
+----
+
+[TIP]
+J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci], c'est un REPL pour Haskell.
+
+Intéressons nous au fonction à _plusieurs_ paramètres:
+
+[source,haskell]
+----
+include::{samplesdir}/multi-param.hs[]
+----
+
+On retrouve une syntaxe standard, le ``Int -> Int -> Int`` nous indique que la fonction nécessite deux paramètres de type `Int` pour renvoyer une valeur de type `Int` également.
+Sur la deuxième ligne les paramètres sont séparer par des espaces et on retrouve ensuite le corps de la fonction.
+
+Pour appliquer notre fonction :
+
+[source,haskell]
+----
+λ> add 1 2 -- toujours des espaces pour séparer
+3
+----
+
+Pour en finir avec ce tour rapide de la syntaxe Haskell, voici comment faire une lambda : `\x y -> x + y` (je vous met directement deux paramètres).
+Le `\` indique que ce qui va suivre sera une lambda, puis la liste des paramètres et le corps de la fonction : `\<paramètre(s)> -> <corps>`.
+Et on l'applique ainsi
+
+[source,haskell]
+----
+λ> (\x y -> x + y) 1 2 -- on doit entourer la lambda entre parenthèses sinon le compilateur va croire que `1 2` en font parti
+3
+----
+
+== Lambda vs fonction
+
+Imaginons une lambda un peu complexe 
+
+[source,haskell]
+----
+\x -> 
+    -- des lignes et des lignes de code...
+----
+
+Rajouter par dessus le besoin de l'utiliser à plusieurs endroits.
+Il est raisonnable (et conseillé) d'extraire cette lambda, pour ce faire on va lui donner un nom :
+
+[source,haskell]
+----
+awesomeFun = \x -> 
+    -- des lignes et des lignes de code...
+----
+
+A partir de là, il n'a qu'un pas à franchir pour arriver à une fonction _classique_:
+[source,haskell]
+----
+awesomeFun x = 
+    -- des lignes et des lignes de code...
+----
+
+
+
+====
+Si vous voulez utiliser la même lambda plusieurs fois il vous faudra la nommée: ``add = \x y -> x + y``, 
+vous pourrez alors utiliser `add` plutôt que re-écrire la lambda partout.
+
+D'ailleurs Haskell propose du __sucre syntaxique__ pour cela : 
+
+[source,haskell]
+----
+add x y = x + y
+----
+
+Bravo on vient de montrer qu'une fonction et une lambda c'est la même chose, on pourra d'ailleurs remplacer l'une par l'autre sans soucis.
+====
 
 == passage de fonction en arguments (ou dans des collections)
 
 == curryfication et application partielle
+
+Observez bien la signature de la fonction : ``Int -> Int -> Int``, on utilise ``->`` aussi bien pour séparer les paramètres entre eux que les paramètres de la valeur de retour.
 
 == composition de fonction FTW 
 
