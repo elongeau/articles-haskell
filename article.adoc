@@ -92,6 +92,10 @@ Pour appliquer notre fonction :
 3
 ----
 
+====
+montrer un exemple avec ``\x -> \y -> x + y``
+====
+
 Pour en finir avec ce tour rapide de la syntaxe Haskell, voici comment faire une lambda : `\x y -> x + y` (je vous met directement deux paramètres).
 Le `\` indique que ce qui va suivre sera une lambda, puis la liste des paramètres et le corps de la fonction : `\<paramètre(s)> -> <corps>`.
 Et on l'applique ainsi
