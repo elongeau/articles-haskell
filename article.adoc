@@ -92,69 +92,96 @@ Pour appliquer notre fonction :
 3
 ----
 
+Regardons maintenant comment écrire une lambda: `\x -> x * x`.
+Le `\` indique que ce qui va suivre sera une lambda, on sépare les paramètres du corps de la fonction avec ``->``.
+On l'applique ainsi:
+
+[source,haskell]
+----
+λ> (\x -> x * x) 2 -- on doit entourer la lambda entre parenthèses sinon le compilateur va croire que `2` en fait parti
+4
+----
+
+Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y -> x + y``.
+On a une lambda qui contient une closure.
+On vient ici de faire quelque chose très intéressant, un petit indice d'abord ``\x -> (\y -> x + y)``.
+Toujours pas ?
+Alors je viens d'isoler la closure `\y -> x + y` ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
+D'autre part les deux versions sont parfaitement identiques (les parenthèses sont facultatives).
+On peut alors se dire qu'il s'agit :
+
+* soit d'une fonction à *deux* paramètres retournant une valeur.
+* soit d'une fonction à *un* paramètre retournant une fonction à *un* paramètre retournant une *valeur*.
+
+Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un paramètre et un seul retour.
+On simule une fonction à plusieurs paramètres en disant qu'elle retourne une nouvelle fonction à un paramètre et ainsi de suite jusqu'au résultat final.
+
+La syntaxe Haskell permet nativement le currying :
+
+[source,haskell]
+----
+include::{samplesdir}/concat.hs[]
+-- dans le REPL:
+λ ❯ f "Hello " "world" -- <1>
+"Hello world"
+λ ❯ prefixWithHello = f "Hello " -- <2>
+λ ❯ :t prefixWithHello
+prefixWithHello :: String -> String -- <3>
+λ ❯ prefixWithHello "FP" -- <4>
+"Hello FP"
+λ ❯ prefixWithHello "currying"
+"Hello currying"
+----
+
+<1> on l'utilise normalement
+<2> on ne passe que le premier argument et on assigne la fonction restante
+<3> la fonction restante est ``String -> String`` : c'est ce qu'on attendait (dans le REPL `:t` nous donne le type d'une valeur)
+<4> on peut utiliser la nouvelle fonction comme n'importe quelle autre
+
+[NOTE]
 ====
-montrer un exemple avec ``\x -> \y -> x + y``
-====
-
-Pour en finir avec ce tour rapide de la syntaxe Haskell, voici comment faire une lambda : `\x y -> x + y` (je vous met directement deux paramètres).
-Le `\` indique que ce qui va suivre sera une lambda, puis la liste des paramètres et le corps de la fonction : `\<paramètre(s)> -> <corps>`.
-Et on l'applique ainsi
-
-[source,haskell]
-----
-λ> (\x y -> x + y) 1 2 -- on doit entourer la lambda entre parenthèses sinon le compilateur va croire que `1 2` en font parti
-3
-----
-
-== Lambda vs fonction
-
-Imaginons une lambda un peu complexe 
-
-[source,haskell]
-----
-\x -> 
-    -- des lignes et des lignes de code...
-----
-
-Rajouter par dessus le besoin de l'utiliser à plusieurs endroits.
-Il est raisonnable (et conseillé) d'extraire cette lambda, pour ce faire on va lui donner un nom :
-
-[source,haskell]
-----
-awesomeFun = \x -> 
-    -- des lignes et des lignes de code...
-----
-
-A partir de là, il n'a qu'un pas à franchir pour arriver à une fonction _classique_:
-[source,haskell]
-----
-awesomeFun x = 
-    -- des lignes et des lignes de code...
-----
-
-
-
-====
-Si vous voulez utiliser la même lambda plusieurs fois il vous faudra la nommée: ``add = \x y -> x + y``, 
-vous pourrez alors utiliser `add` plutôt que re-écrire la lambda partout.
-
-D'ailleurs Haskell propose du __sucre syntaxique__ pour cela : 
-
-[source,haskell]
-----
-add x y = x + y
-----
-
-Bravo on vient de montrer qu'une fonction et une lambda c'est la même chose, on pourra d'ailleurs remplacer l'une par l'autre sans soucis.
+Lorsque l'on ne passe tous ces arguments à une fonction on dit qu'on l'**applique partiellement**
 ====
 
-== passage de fonction en arguments (ou dans des collections)
+== Une fonction dans la fonction
 
-== curryfication et application partielle
+Vous vous souvenez du premier exemple en Java ? 
+On passait une lambda à la fonction `map`, il s'agit aussi d'une **higher order function** comme on passe une fonction comme paramètre d'une autre.
 
-Observez bien la signature de la fonction : ``Int -> Int -> Int``, on utilise ``->`` aussi bien pour séparer les paramètres entre eux que les paramètres de la valeur de retour.
+Un petit exemple en haskell bien entendu:
+
+[source,haskell]
+----
+λ> map (\x -> x * 2) [1,2,3]
+[ 2, 4, 6 ]
+----
+
+On entoure la lambda de parenthèses sinon le compilateur ne saura pas où elle s'arrête !
+`[1,2,3]` est la liste d'entier.
+
+Si vous voulez faire vos propres fonctions prenant une (ou des, soyons fous) fonction il faut feinter, regardons la signature de `map`:
+
+[source,haskell]
+----
+λ> :t map
+map :: (a -> b) -> [a] -> [b]
+----
+
+Il faut, une nouvelle fois, cerner la fonction avec des parenthèses.
+`map` est donc une fonction prenant une fonction (de type `a -> b`) et une liste puis retourne une liste.
+
+[NOTE]
+====
+Les `a` et `b` dans la signature ne sont pas des variables mais des types polymorphes, cela veut dire que l'on pourra les remplacer par n'importe quel type.
+====
 
 == composition de fonction FTW 
+
+== Tout est fonction
+
+====
+``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
+====
 
 == conclusion
 
