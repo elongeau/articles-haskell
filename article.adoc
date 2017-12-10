@@ -175,11 +175,86 @@ Il faut, une nouvelle fois, cerner la fonction avec des parenthèses.
 Les `a` et `b` dans la signature ne sont pas des variables mais des types polymorphes, cela veut dire que l'on pourra les remplacer par n'importe quel type.
 ====
 
-== composition de fonction FTW 
+== Une fonction plus une fonction égale... une fonction
+
+Dans tout projet de développement, on a tendance à rechercher à faire des composants (objet, procédure, fonction...) petit et composable.
+Personnellement je vois ça comme des lego, des centaines de petites pièces qui ne peuvent rien seule, mais dés qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
+
+====
+image de lego ?
+====
+
+Avec des fonctions on peut pousser la composition assez loin, trêve de bavardage, un exemple!
+
+[source,haskell]
+----
+λ> greetings s = "Hello " ++ s
+λ> reverseGreet s = (greetings . reverse) s
+λ> reverseGreet "dlrow"
+"Hello world"
+----
+
+Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
+On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`,
+quand celle-ci est appliqué:
+
+. elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
+. la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
+
+L'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
+
+[source,haskell]
+----
+include::{samplesdir}/compose.hs[]
+
+-- à l'éxécution
+λ> greetings s = "Hello " ++ s
+λ> (compose greetings reverse) "dlrow"
+"Hello world"
+----
+
+Dans notre exemple, comment fait on pour composer ? 
+On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres,
+d'abord `f x` puis son résultat est passé à `g`.
+
+== Libérez les paramètres
+
+Pour construire la fonction `reverseGreet` qu'a t'on fait ?
+
+[source,haskell]
+----
+reverseGreet :: String -> String
+reverseGreet s = (greetings . reverse) s
+----
+
+On indique que l'on a un paramètre `s` auquel on applique la fonction (composée) ``(greetings . reverse)``.
+Saviez-vous que l'on pouvait se passer du paramètre ?
+En tout cas ne pas l'écrire ?
+
+Je vais vous demander un peu de souplesse mentale: une fonction étant une valeur elle a un type, du moment qu'elle à une valeur du bon type tout ira bien, donc:
+
+* Quel est le type de `reverseGreet` ? `String -> String`.
+* Quel est le type de `greetings . reverse` ? `String -> String`.
+
+A partir de là on peut simplement écrire
+
+[source,haskell]
+----
+reverseGreet :: String -> String
+reverseGreet = greetings . reverse
+----
+
+Plus besoin de paramètre
+
+[NOTE]
+====
+Ce style de notation est dite **point free**, on n'écrit plus les paramètres on décrit le flux de transformation des données.
+====
 
 == Tout est fonction
 
 ====
+reprendre l'exemple de la composition et enlever les paramètres.
 ``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
 ====
 
