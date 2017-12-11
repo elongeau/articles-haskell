@@ -201,6 +201,12 @@ quand celle-ci est appliqué:
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
 
+[TIP]
+====
+Pourquoi appeler la fonction de composition `.` ?
+Parce qu'en notation mathématique la composition s'écrit `rond`
+====
+
 L'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
 
 [source,haskell]
@@ -254,7 +260,6 @@ Ce style de notation est dite **point free**, on n'écrit plus les paramètres o
 == Tout est fonction
 
 ====
-reprendre l'exemple de la composition et enlever les paramètres.
 ``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
 ====
 
