@@ -254,7 +254,7 @@ Plus besoin de paramètre
 
 [NOTE]
 ====
-Ce style de notation est dite **point free**, on n'écrit plus les paramètres on décrit le flux de transformation des données.
+Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 ====
 
 == Tout est fonction
@@ -263,9 +263,34 @@ Ce style de notation est dite **point free**, on n'écrit plus les paramètres o
 ``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
 ====
 
+== Une fonction c'est vraiment juste une valeur
+
+Histoire d'enfoncer le clou, je voudrais vous montrer un petit exemple de manipulation de fonction:
+
+
+[source,haskell]
+----
+include::{samplesdir}/fun-in-list.hs[]
+----
+
+On construit d'abord une liste contenant des fonctions : ``listOfFunction``.
+
+Ensuite pour l'éxecuter : 
+[source,haskell]
+----
+λ ❯ map (\f -> f "world") listOfFunction
+[ "dlrow"
+, "Hello world"
+]
+----
+
+Pour rappel, `map` prend en paramètre une liste et applique une fonction à chaque élément de la dite liste.
+Dans notre cas la fonction est la lambda `\f -> f "world"`,
+les éléments de la liste étant des fonctions, `f` en est une, on lui passe alors le paramètre `"world"`.
+
 == conclusion
 
-On a vu que dans un langage fonctionnel, une fonction est une valeur comme une autre que l'on peut aisément manipuler. 
+On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on peut aisément manipuler. 
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
 au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
 
