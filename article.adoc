@@ -5,6 +5,7 @@
 :source-language: haskell
 :samplesdir: ./samples
 :2c: ::
+:bq: `
 
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
@@ -257,28 +258,54 @@ Plus besoin de paramètre
 Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 ====
 
-== Tout est fonction
+== Un exemple complet (titre temporaire !!!)
 
+[source,haskell]
+----
+include::{samplesdir}/test.hs[]
+----
+
+[TIP]
+.le `()`
 ====
+`()` représente soit un type soit la seule valeur de ce type: le tuple vide, c'est à dure avec aucune valeur.
+Dans notre cas il permet dire qu'une fonction n'a aucun paramètre intéressant, car techniquement elle en a un: `()`.
+====
+
+[TIP]
+.Postfix et infix (à supprimer ?)
+====
+Quand une fonction à deux paramètres on peut l'utiliser de deux manières différente:
+
+postfix::
+le nom de la fonction est en premier suivi des ces paramètres, c'est ce qu'on a vu jusqu'a présent: `add 1 1`.
+C'est la notation privilégiée pour les fonctions dont le nom est alphanumérique
+
+infix::
+le nom de la fonction est placé entre ces paramètres comme un opérateur : ``1 + 1`` (oui `+` est une fonction).
+Utilisé plus particuièrement pour les fonctions dont le nom est un symbole (`?` dans notre cas).
+
+On peut intervertir les usage en entourant une fonction postfixe de `{bq}` : ``1 {bq}add{bq} 1``, pour une fonction infixe ce sera avec des parenthèse : `(+) 1 1`
+====
+
+----
 ``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
-====
+----
 
 == Une fonction c'est vraiment juste une valeur
 
-Histoire d'enfoncer le clou, je voudrais vous montrer un petit exemple de manipulation de fonction:
-
+Histoire d'enfoncer le clou, je voudrais vous montrer un petit exemple de manipulation de fonction.
+On construit d'abord une liste contenant des fonctions:
 
 [source,haskell]
 ----
 include::{samplesdir}/fun-in-list.hs[]
 ----
 
-On construit d'abord une liste contenant des fonctions : ``listOfFunction``.
-
-Ensuite pour l'éxecuter : 
+Ensuite on utilise le tout:
 [source,haskell]
 ----
-λ ❯ map (\f -> f "world") listOfFunction
+λ> map (\f -> f "world") listOfFunction
 [ "dlrow"
 , "Hello world"
 ]
@@ -286,9 +313,9 @@ Ensuite pour l'éxecuter :
 
 Pour rappel, `map` prend en paramètre une liste et applique une fonction à chaque élément de la dite liste.
 Dans notre cas la fonction est la lambda `\f -> f "world"`,
-les éléments de la liste étant des fonctions, `f` en est une, on lui passe alors le paramètre `"world"`.
+les éléments de la liste étant des fonctions, `f` en est une également, on l'applique alors sur `world`.
 
-== conclusion
+== Function for ever
 
 On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on peut aisément manipuler. 
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
