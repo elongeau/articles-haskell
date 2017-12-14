@@ -258,18 +258,26 @@ Plus besoin de paramètre
 Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 ====
 
-== Un exemple complet (titre temporaire !!!)
+== Mon framework de test à moi
+
+Pour finir je vous propose un mini framework de test en Haskell:
 
 [source,haskell]
 ----
 include::{samplesdir}/test.hs[]
 ----
 
+<1> On défini deux **type alias** :
+
+* `Lazy` pour représenter une fonction sans paramètre _intéressant_ (le `()`, voir la note ci-dessous) et contenant un type polymorphe (le `a`).
+
+
+
 [TIP]
-.le `()`
+.le cas `()`
 ====
-`()` représente soit un type soit la seule valeur de ce type: le tuple vide, c'est à dure avec aucune valeur.
-Dans notre cas il permet dire qu'une fonction n'a aucun paramètre intéressant, car techniquement elle en a un: `()`.
+Je disais que la fonction n'avait aucun paramètre intéressant car ce qu'on veut modéliser un traitement qui s'éxécutera plus tard, d'où le `Lazy`.
+Concernant le `()`, on parle de tuple vide, c'est l'unique valeur du type `()`.
 ====
 
 [TIP]
