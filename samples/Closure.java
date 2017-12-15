@@ -1,4 +1,4 @@
-public class Closure {
+public class ClosureSample {
     public static void main(String... args) {
         Stream.of(1, 2, 3, 4)
             .map(add(2))
