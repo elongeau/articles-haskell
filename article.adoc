@@ -285,29 +285,6 @@ Ici on passe la valeur `tests` à la fonction composée `map format . runTests`.
 
 On a ici un mini-framework de test (certes limité) en quelque lignes.
 
-== Au final, une fonction c'est vraiment juste une valeur
-
-Histoire d'enfoncer le clou, je voudrais vous montrer un petit exemple de manipulation de fonction.
-On construit d'abord une liste contenant des fonctions:
-
-[source,haskell]
-----
-include::{samplesdir}/fun-in-list.hs[]
-----
-
-Ensuite on utilise le tout:
-[source,haskell]
-----
-λ> map (\f -> f "world") listOfFunction
-[ "dlrow"
-, "Hello world"
-]
-----
-
-Pour rappel, `map` prend en paramètre une liste et applique une fonction à chaque élément de la dite liste.
-Dans notre cas la fonction est la lambda `\f -> f "world"`,
-les éléments de la liste étant des fonctions, `f` en est une également, on l'applique alors sur `world`.
-
 == Function for ever
 
 On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on peut aisément manipuler. 
