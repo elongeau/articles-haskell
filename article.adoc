@@ -269,38 +269,27 @@ include::{samplesdir}/test.hs[]
 
 <1> On défini deux **type alias** :
 
-* `Lazy` pour représenter une fonction sans paramètre _intéressant_ (le `()`, voir la note ci-dessous) et contenant un type polymorphe (le `a`).
-
-
-
-[TIP]
-.le cas `()`
-====
-Je disais que la fonction n'avait aucun paramètre intéressant car ce qu'on veut modéliser un traitement qui s'éxécutera plus tard, d'où le `Lazy`.
+* `Lazy` pour représenter une valeur qui sera produite ultérieurement, c'est une fonction sans paramètre _intéressant_ (le `()`) et contenant un type polymorphe (le `a`).
+Je disais que la fonction n'avait aucun paramètre intéressant car ce qu'on veut modéliser c'est un traitement qui s'éxécutera plus tard, d'où le `Lazy`.
 Concernant le `()`, on parle de tuple vide, c'est l'unique valeur du type `()`.
-====
+* `UnitTest` est un `Lazy (Bool, String)` donc un traitement qui produira une paire contenant un `Bool` et une `String`.
 
-[TIP]
-.Postfix et infix (à supprimer ?)
-====
-Quand une fonction à deux paramètres on peut l'utiliser de deux manières différente:
+<2> Une valeur de type `UnitTest` doit être une fonction, la fonction `test` retourne donc une lambda.
+Le `let ... in` est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d'avoir un illisible __one-liner__)
+Vous remarquerez que pour éxécuter le test on lui passe la valeur `()`.
 
-postfix::
-le nom de la fonction est en premier suivi des ces paramètres, c'est ce qu'on a vu jusqu'a présent: `add 1 1`.
-C'est la notation privilégiée pour les fonctions dont le nom est alphanumérique
+<3> Un exemple de http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif[**pattern matching**]
 
-infix::
-le nom de la fonction est placé entre ces paramètres comme un opérateur : ``1 + 1`` (oui `+` est une fonction).
-Utilisé plus particuièrement pour les fonctions dont le nom est un symbole (`?` dans notre cas).
+<4> On applique partiellement `map` avec juste une lambda, on obtient alors une fonction `[UnitTest] -> [(Bool,String)]`
 
-On peut intervertir les usage en entourant une fonction postfixe de `{bq}` : ``1 {bq}add{bq} 1``, pour une fonction infixe ce sera avec des parenthèse : `(+) 1 1`
-====
+<5> Le `$` est une fonction (`($) {2c} (a -> b) -> a -> b`) qui passe la valeur à sa droite à la fonction à sa gauche, c'est un moyen pratique d'éviter ceci : `(map format . runTests) tests`.
+Ici on passe la valeur `tests` à la fonction composée `map format . runTests`.
 
-----
-``map (\x -> x * 2) [1,2,3]`` peut s'écrire ``map ((*) 2) [1,2,3]``
-----
+<6> la fonction `:` (`(:) {2c} a -> [a] -> [a]`) ajoute une valeur au début d'une liste.
 
-== Une fonction c'est vraiment juste une valeur
+On a ici un mini-framework de test (certes limité) en quelque lignes.
+
+== Au final, une fonction c'est vraiment juste une valeur
 
 Histoire d'enfoncer le clou, je voudrais vous montrer un petit exemple de manipulation de fonction.
 On construit d'abord une liste contenant des fonctions:

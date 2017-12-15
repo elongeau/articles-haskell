@@ -1,5 +1,5 @@
-type Lazy a = () -> a
-type UnitTest =  Lazy (Bool, String) -- <1>
+type Lazy a = () -> a -- <1>
+type UnitTest =  Lazy (Bool, String)
 
 -- une fonction pour construire des UnitTests
 test :: String -> (() -> Bool) -> UnitTest -- <2>
