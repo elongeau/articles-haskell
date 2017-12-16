@@ -1,3 +1,4 @@
+-- Quelque types
 type Lazy a = () -> a -- <1>
 type UnitTest =  Lazy (Bool, String)
 
@@ -14,38 +15,37 @@ test label testFun =
             -- on renvoi une paire (<résultat du test>, <description du test>)
             (testResult, label)
 
--- interprète le résultat d'un test
-interpret :: Bool -> String -- <3>
-interpret True = "✔"
-interpret False = "✘"
-        
-color :: Bool -> String
-color True = "\x1b[32m"
-color False = "\x1b[31m"
-
--- format le résultat d'un test
-format :: (Bool, String) -> String
-format (result, label) = 
-    let
-        startColor = color result
-        icon = interpret result
-        resetColor = "\x1b[0m"
-    in
-        "  " ++ startColor ++ label ++ " " ++ icon ++ resetColor
-
 -- groupe et exécute des tests
 describe :: String -> [UnitTest] -> String
 describe label tests =
     let
-        runTests = map (\test -> test ()) -- <4>
+        runTests = map (\test -> test ()) -- <3>
         -- exécute tous les test puis formate leur résultat
-        runAll = map format . runTests $ tests -- <5>
+        runAll = map format . runTests $ tests -- <4>
         -- ajoute le descriptif tu groupe
-        report = label : runAll -- <6>
+        report = label : runAll -- <5>
     in
         -- formate le tout
         unlines report        
 
+-- génère une icone selon le résultat du test
+shellIcon :: Bool -> String -- <6>
+shellIcon True  = "✔"
+shellIcon False = "✘"
+        
+shellColor :: Bool -> String
+shellColor True  = "\x1b[32m"
+shellColor False = "\x1b[31m"
+
+-- formate le résultat d'un test
+format :: (Bool, String) -> String
+format (result, label) = 
+    let
+        startColor = shellColor result
+        icon = shellIcon result
+        resetColor = "\x1b[0m"
+    in
+        "  " ++ startColor ++ label ++ " " ++ icon ++ resetColor
         
 -- On lance nos tests
 main = 

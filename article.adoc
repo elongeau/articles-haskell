@@ -10,7 +10,7 @@
 Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
 si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
 Mais Java (entre autre) reste attaché au paradigme objet.
-Donc partons à l'aventure au pays des fonctions et des lambdas.
+Partons donc à l'aventure au pays des fonctions et des lambdas.
 
 == Dis papa c'est quoi une lambda ?
 
@@ -24,8 +24,8 @@ include::{samplesdir}/Lambda.java[]
 Ici on utilise l'API Stream de Java 8 pour doubler chaque nombre du `Stream`.
 `map` applique successivement la lambda `x -> x * 2` à chaque élément du `Stream`.
 
-Ce que nous apporte l'utilisation d'une lambda c'est la concision, la lecture du code nous informe tout de suite de ce que l'on veut faire : multiplier un nombre par 2.
-Comment et quand sera appliqué la lambda dépendra de l'appelant (ici `map`).
+L'intérêt d'utiliser une lambda ici est de fournir un comportement à exécuter.
+Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
 
 === Et les closures dans tout ça ?
 
@@ -36,7 +36,7 @@ Une closure ressemble à une lambda mais elle embarque en plus un *contexte*:
 include::{samplesdir}/Closure.java[]
 ----
 
-Avez vous devinez pourquoi `x -> x + i` est un closure ?
+Avez vous devinez pourquoi `x -> x + i` est une closure ?
 Elle n'a pas de nom comme une lambda mais d'où vient le `i` ?
 De la méthode `add`, la variable `i` fait parti du contexte dont on parlait. 
 Lorsque la fonction `x -> x + i` s'exécutera, le `i` viendra du contexte de la closure.
@@ -45,7 +45,7 @@ Lorsque la fonction `x -> x + i` s'exécutera, le `i` viendra du contexte de la 
 
 On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
 Pourquoi me direz-vous ?
-Et bien parce que Haskell est un langage strictement fonctionnel et sa syntaxe permet des petits _tour de passe-passe_ plus à même d'exposer mon propos.
+Et bien parce que Haskell est un langage fonctionnel et est donc tout à fait adapté à cet article.
 
 Donc avant de commencer, une petite leçon d'Haskell :
 
@@ -89,7 +89,7 @@ Pour appliquer notre fonction :
 
 [source,haskell]
 ----
-λ> add 1 2 -- toujours des espaces pour séparer
+λ> add 1 2 -- toujours des espaces pour séparer les paramètres
 3
 ----
 
@@ -107,14 +107,14 @@ Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y 
 On a une lambda qui contient une closure.
 On vient ici de faire quelque chose de très intéressant, un petit indice d'abord ``\x -> (\y -> x + y)``.
 Toujours pas ?
-Alors je viens d'isoler la closure `\y -> x + y` ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
+Alors je viens d'isoler la closure `\y -> x + y`, ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
 D'autre part les deux versions sont parfaitement identiques (les parenthèses sont facultatives).
 On peut alors se dire qu'il s'agit :
 
 * soit d'une fonction à *deux* paramètres retournant une valeur.
 * soit d'une fonction à *un* paramètre retournant une fonction à *un* paramètre retournant une *valeur*.
 
-Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un paramètre et un seul retour.
+Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un paramètre et une seule valeur de retour.
 On simule une fonction à plusieurs paramètres en disant qu'elle retourne une nouvelle fonction à un paramètre et ainsi de suite jusqu'au résultat final.
 
 La syntaxe Haskell permet nativement le currying :
@@ -139,15 +139,17 @@ prefixWithHello :: String -> String -- <3>
 <3> la fonction restante est ``String -> String`` : c'est ce qu'on attendait (dans le REPL `:t` nous donne le type d'une valeur)
 <4> on peut utiliser la nouvelle fonction comme n'importe quelle autre
 
-[NOTE]
+Lorsque l'on ne passe pas tous ces arguments à une fonction on dit qu'on l'**applique partiellement**
+
+[TIP]
 ====
-Lorsque l'on ne passe tous ces arguments à une fonction on dit qu'on l'**applique partiellement**
+Accessoirement, pour avoir une lambda à plusieurs paramètres on peut tout à fait l'écrire ``\x y -> x + y``, c'est juste du sucre syntaxique.
 ====
 
 == Une fonction dans la fonction
 
 Vous vous souvenez du premier exemple en Java ? 
-On passait une lambda à la fonction `map`, il s'agit aussi d'une **higher order function** comme on passe une fonction comme paramètre d'une autre.
+On passait une lambda à la fonction `map`, il s'agit aussi d'une **higher order function**: on passe une fonction comme paramètre d'une autre.
 
 Un petit exemple en haskell bien entendu:
 
@@ -178,7 +180,7 @@ Les `a` et `b` dans la signature ne sont pas des variables mais des types polymo
 
 == Une fonction plus une fonction égale... une fonction
 
-Dans tout projet de développement, on a tendance à rechercher à faire des composants (objet, procédure, fonction...) petit et composable.
+Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petit et composable.
 Personnellement je vois ça comme des lego, des centaines de petites pièces qui ne peuvent rien seule, mais dés qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
 
 Avec des fonctions on peut pousser la composition assez loin, trêve de bavardage, un exemple!
@@ -192,7 +194,7 @@ Avec des fonctions on peut pousser la composition assez loin, trêve de bavardag
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`,
+On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c` (__higher order function FTW__),
 quand celle-ci est appliqué:
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
@@ -247,12 +249,8 @@ reverseGreet :: String -> String
 reverseGreet = greetings . reverse
 ----
 
-Plus besoin de paramètre
-
-[NOTE]
-====
+Plus besoin de paramètre. 
 Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
-====
 
 == Mon framework de test à moi
 
@@ -274,16 +272,22 @@ Concernant le `()`, on parle de tuple vide, c'est l'unique valeur du type `()`.
 Le `let ... in` est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d'avoir un illisible __one-liner__)
 Vous remarquerez que pour éxécuter le test on lui passe la valeur `()`.
 
-<3> Un exemple de http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif[**pattern matching**]
+<3> On applique partiellement `map` avec juste une lambda, on obtient alors une fonction `[UnitTest] -> [(Bool,String)]`.
+Vous avez vu ? `UnitTest` est une fonction, on peut donc également construire des listes de fonctions !
 
-<4> On applique partiellement `map` avec juste une lambda, on obtient alors une fonction `[UnitTest] -> [(Bool,String)]`
-
-<5> Le `$` est une fonction (`($) {2c} (a -> b) -> a -> b`) qui passe la valeur à sa droite à la fonction à sa gauche, c'est un moyen pratique d'éviter ceci : `(map format . runTests) tests`.
+<4> Le `$` est une fonction (`($) {2c} (a -> b) -> a -> b`) qui passe la valeur à sa droite à la fonction à sa gauche, c'est un moyen pratique d'éviter ceci : `(map format . runTests) tests`.
 Ici on passe la valeur `tests` à la fonction composée `map format . runTests`.
 
-<6> la fonction `:` (`(:) {2c} a -> [a] -> [a]`) ajoute une valeur au début d'une liste.
+<5> la fonction `:` (`(:) {2c} a -> [a] -> [a]`) ajoute une valeur au début d'une liste.
+
+<6> Un exemple de http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif[**pattern matching**].
 
 On a ici un mini-framework de test (certes limité) en quelque lignes.
+Vous pourrez constatez qu'on se base juste sur la syntaxe et des fonctions (et du pattern matching mais difficile de s'en passer).
+
+Ci-dessous un exemple d'éxécution:
+
+image::result.png[align="center"]
 
 == Function for ever
 
