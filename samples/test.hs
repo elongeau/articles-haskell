@@ -1,5 +1,4 @@
--- Quelque types
-type UnitTest =  () -> (Bool, String)
+type UnitTest =  () -> (Bool, String) -- <1>
 
 -- une fonction pour construire des UnitTests
 test :: String -> (() -> Bool) -> UnitTest -- <2>

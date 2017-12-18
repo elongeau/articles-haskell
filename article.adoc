@@ -188,8 +188,7 @@ Avec des fonctions on peut pousser la composition assez loin, trêve de bavardag
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c` (__higher order function FTW__),
-quand celle-ci est appliqué:
+On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`, que fait-elle ?
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
