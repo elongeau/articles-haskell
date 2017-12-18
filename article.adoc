@@ -117,14 +117,14 @@ La syntaxe Haskell permet nativement le currying :
 ----
 include::{samplesdir}/concat.hs[]
 -- dans le REPL:
-λ ❯ join "Hello " "World" -- <1>
+λ> join "Hello " "World" -- <1>
 "Hello World"
-λ ❯ greetings = join "Hello " -- <2>
-λ ❯ :t greetings
+λ> greetings = join "Hello " -- <2>
+λ> :t greetings
 greetings :: String -> String -- <3>
-λ ❯ greetings "FP" -- <4>
+λ> greetings "FP" -- <4>
 "Hello FP"
-λ ❯ greetings "Currying"
+λ> greetings "Currying"
 "Hello Currying"
 ----
 
