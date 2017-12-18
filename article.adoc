@@ -31,63 +31,71 @@ Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
 
 On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
 Pourquoi me direz-vous ?
-Et bien parce que Haskell est un langage fonctionnel et est donc tout à fait adapté à cet article.
+Haskell est un langage fonctionnel et sa syntaxe me permettra de vous montrer quelque bienfait de la programmation fonctionnelle.
 
-Donc avant de commencer, une petite leçon d'Haskell :
+.Un peu de syntaxe 
+|===
+|Description | Code |Utilisation 
 
-On ne parle pas de variable en Haskell car tout est immutable, on utilisera plutôt le terme *valeur*.
-
-Déclarer une valeur ou une fonction se fait comme ceci:
-
+| une valeur
+a|
 [source,haskell]
 ----
-include::{samplesdir}/fun-as-value.hs[]
+i :: Int
+i = 42
 ----
-
-La première ligne de chaque bloc représente la signature sous la forme ``<nom> {2c} <type>``.
-La suivante assigne une _expression_ à un _nom_ (`42` à `i` et `lenght s` à `f`). 
-Remarquez comment la syntaxe Haskell ne distingue pas une valeur d'une fonction, ceci nous indique quelque chose.
-Dans un langage fonctionnel, une fonction est une valeur, c'est le type de la valeur qui déterminera son usage et pas sa nature (_variable_ ou fonction).
-
-Et pour utiliser tout ça
+a|
 [source,haskell]
 ----
 λ> i
 42
-λ> f "Hello"
-5
 ----
 
-[TIP]
-J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci], c'est un REPL pour Haskell.
-
-Intéressons nous au fonction à _plusieurs_ paramètres:
-
+|une fonction
+a|
 [source,haskell]
 ----
-include::{samplesdir}/multi-param.hs[]
+f :: String -> Int
+f s = "Hello " ++ s
 ----
-
-On retrouve une syntaxe standard, le ``Int -> Int -> Int`` nous indique que la fonction nécessite deux paramètres de type `Int` pour renvoyer une valeur de type `Int` également.
-Sur la deuxième ligne les paramètres sont séparer par des espaces et on retrouve ensuite le corps de la fonction.
-
-Pour appliquer notre fonction :
-
+a|
 [source,haskell]
 ----
-λ> add 1 2 -- toujours des espaces pour séparer les paramètres
+λ> f "World"
+"Hello World"
+----
+
+|une fonction à plusieurs paramètres
+a|
+[source,haskell]
+----
+add :: Int -> Int -> Int
+add x y = x + y
+----
+a|
+[source,haskell]
+----
+λ> add 1 2
 3
 ----
 
-Regardons maintenant comment écrire une lambda: `\x -> x * x`.
-Le `\` indique que ce qui va suivre sera une lambda, on sépare les paramètres du corps de la fonction avec ``->``.
-On l'applique ainsi:
-
+| une lambda
+a|
 [source,haskell]
 ----
-λ> (\x -> x * x) 2 -- on doit entourer la lambda entre parenthèses sinon le compilateur va croire que `2` en fait parti
+\x -> x * x
+----
+a|
+[source,haskell]
+----
+\λ> (\x -> x * x) 2
 4
 ----
+|===
+[TIP]
+J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci] pour exécuter le code, c'est un REPL pour Haskell.
+
+== Un peu d'épice pour relevez le gout ?
 
 Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y -> x + y``.
 On a une lambda qui contient une lambda.
@@ -109,15 +117,15 @@ La syntaxe Haskell permet nativement le currying :
 ----
 include::{samplesdir}/concat.hs[]
 -- dans le REPL:
-λ> f "Hello " "world" -- <1>
-"Hello world"
-λ> prefixWithHello = f "Hello " -- <2>
-λ> :t prefixWithHello
-prefixWithHello :: String -> String -- <3>
-λ> prefixWithHello "FP" -- <4>
+λ ❯ join "Hello " "World" -- <1>
+"Hello World"
+λ ❯ greetings = join "Hello " -- <2>
+λ ❯ :t greetings
+greetings :: String -> String -- <3>
+λ ❯ greetings "FP" -- <4>
 "Hello FP"
-λ> prefixWithHello "currying"
-"Hello currying"
+λ ❯ greetings "Currying"
+"Hello Currying"
 ----
 
 <1> on l'utilise normalement
@@ -247,12 +255,8 @@ Pour finir je vous propose un mini framework de test en Haskell:
 include::{samplesdir}/test.hs[]
 ----
 
-<1> On défini deux **type alias** :
-
-* `Lazy` pour représenter une valeur qui sera produite ultérieurement, c'est une fonction sans paramètre _intéressant_ (le `()`) et contenant un type polymorphe (le `a`).
-Je disais que la fonction n'avait aucun paramètre intéressant car ce qu'on veut modéliser c'est un traitement qui s'éxécutera plus tard, d'où le `Lazy`.
-Concernant le `()`, on parle de tuple vide, c'est l'unique valeur du type `()`.
-* `UnitTest` est un `Lazy (Bool, String)` donc un traitement qui produira une paire contenant un `Bool` et une `String`.
+<1> On défini un **type alias**: `UnitTest` est un synonyme pour le type `() -> (Bool, String)` soit une fonction qui produira une paire contenant un `Bool` et une `String`.
+Le `()` est le tuple vide: un type `()` ayant pour seule valeur `()` (oui c'est troublant au début).
 
 <2> Une valeur de type `UnitTest` doit être une fonction, la fonction `test` retourne donc une lambda.
 Le `let ... in` est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d'avoir un illisible __one-liner__)

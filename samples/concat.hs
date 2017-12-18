@@ -1,2 +1,2 @@
-f :: String -> String -> String
-f a b = a ++ b
+join :: String -> String -> String
+join a b = a ++ b
