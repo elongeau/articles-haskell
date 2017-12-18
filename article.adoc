@@ -27,20 +27,6 @@ Ici on utilise l'API Stream de Java 8 pour doubler chaque nombre du `Stream`.
 L'intérêt d'utiliser une lambda ici est de fournir un comportement à exécuter.
 Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
 
-=== Et les closures dans tout ça ?
-
-Une closure ressemble à une lambda mais elle embarque en plus un *contexte*:
-
-[source,java]
-----
-include::{samplesdir}/Closure.java[]
-----
-
-Avez vous devinez pourquoi `x -> x + i` est une closure ?
-Elle n'a pas de nom comme une lambda mais d'où vient le `i` ?
-De la méthode `add`, la variable `i` fait parti du contexte dont on parlait. 
-Lorsque la fonction `x -> x + i` s'exécutera, le `i` viendra du contexte de la closure.
-
 == Les fonctions en Haskell
 
 On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
@@ -104,10 +90,10 @@ On l'applique ainsi:
 ----
 
 Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y -> x + y``.
-On a une lambda qui contient une closure.
+On a une lambda qui contient une lambda.
 On vient ici de faire quelque chose de très intéressant, un petit indice d'abord ``\x -> (\y -> x + y)``.
 Toujours pas ?
-Alors je viens d'isoler la closure `\y -> x + y`, ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
+Alors je viens d'isoler la lambda `\y -> x + y`, ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
 D'autre part les deux versions sont parfaitement identiques (les parenthèses sont facultatives).
 On peut alors se dire qu'il s'agit :
 
