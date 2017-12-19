@@ -34,17 +34,18 @@ Pourquoi me direz-vous ?
 Haskell est un langage fonctionnel et sa syntaxe me permettra de vous montrer quelque bienfait de la programmation fonctionnelle.
 
 .Un peu de syntaxe 
+[options="header", cols="1,1a,1a"]
 |===
 |Description | Code |Utilisation 
 
 | une valeur
-a|
+|
 [source,haskell]
 ----
 i :: Int
 i = 42
 ----
-a|
+|
 [source,haskell]
 ----
 λ> i
@@ -52,13 +53,13 @@ a|
 ----
 
 |une fonction
-a|
+|
 [source,haskell]
 ----
 f :: String -> Int
 f s = "Hello " ++ s
 ----
-a|
+|
 [source,haskell]
 ----
 λ> f "World"
@@ -66,13 +67,13 @@ a|
 ----
 
 |une fonction à plusieurs paramètres
-a|
+|
 [source,haskell]
 ----
 add :: Int -> Int -> Int
 add x y = x + y
 ----
-a|
+|
 [source,haskell]
 ----
 λ> add 1 2
@@ -80,12 +81,12 @@ a|
 ----
 
 | une lambda
-a|
+|
 [source,haskell]
 ----
 \x -> x * x
 ----
-a|
+|
 [source,haskell]
 ----
 \λ> (\x -> x * x) 2
@@ -95,21 +96,51 @@ a|
 [TIP]
 J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci] pour exécuter le code, c'est un REPL pour Haskell.
 
+Haskell permet de __placer__ une fonction soit avant ses paramètres (postfix) ou entre (infix). 
+Les fonctions alphanumériques seront postfix et celles dont le nom est un ou des symboles (`.`, `>>`) seront infix.
+On peut intervertir leurs usages:
+
+[cols="1,1a,1a"]
+|===
+||en postfix | en infix
+|fonction postfix
+|
+[source,haskell]
+----
+add 1 2
+----
+|
+[source,haskell]
+----
+1 `add` 2
+----
+|fonction infix
+|
+[source,haskell]
+----
+(.) f g
+----
+|
+[source,haskell]
+----
+f . g
+----
+|===
+
 == Un peu d'épice pour relevez le gout ?
 
 Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y -> x + y``.
 On a une lambda qui contient une lambda.
 On vient ici de faire quelque chose de très intéressant, un petit indice d'abord ``\x -> (\y -> x + y)``.
 Toujours pas ?
-Alors je viens d'isoler la lambda `\y -> x + y`, ceci nous indique deux choses: d'une part une fonction peut en retourner une autre, on parle alors de **higher order function**.
-D'autre part les deux versions sont parfaitement identiques (les parenthèses sont facultatives).
-On peut alors se dire qu'il s'agit :
+Alors je viens d'isoler la lambda `\y -> x + y`, ceci nous indique qu'une fonction peut en retourner une autre, on parle alors de **higher order function**.
+On peut se dire qu'il s'agit :
 
 * soit d'une fonction à *deux* paramètres retournant une valeur.
 * soit d'une fonction à *un* paramètre retournant une fonction à *un* paramètre retournant une *valeur*.
 
-Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un paramètre et une seule valeur de retour.
-On simule une fonction à plusieurs paramètres en disant qu'elle retourne une nouvelle fonction à un paramètre et ainsi de suite jusqu'au résultat final.
+Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un seul paramètre et une seule valeur de retour.
+En fait une fonction à plusieurs paramètres c'est une fonction à un paramètre retournant une fonction à un paramètre et ainsi de suite jusqu'au résultat final.
 
 La syntaxe Haskell permet nativement le currying :
 
@@ -177,7 +208,7 @@ Les `a` et `b` dans la signature ne sont pas des variables mais des types polymo
 Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petit et composable.
 Personnellement je vois ça comme des lego, des centaines de petites pièces qui ne peuvent rien seule, mais dés qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
 
-Avec des fonctions on peut pousser la composition assez loin, trêve de bavardage, un exemple!
+On peut également composer des fonctions, on à alors une nouvelle fonction:
 
 [source,haskell]
 ----
@@ -188,7 +219,7 @@ Avec des fonctions on peut pousser la composition assez loin, trêve de bavardag
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`, que fait-elle ?
+On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`, que se passe t-il à l'intérieur ?
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
