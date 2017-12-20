@@ -279,15 +279,15 @@ reverseGreet = greetings . reverse
 ----
 
 Plus de paramètres !
-Rien de magique la dedans, encore moins d'une fonctionnalité d'Haskell, il faut vraiment voir les fonctions comme des valeurs.
-Au final ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
+Rien de magique la dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explication: 
+ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
 Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
 
 Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 
 == Mon framework de test à moi
 
-Pour finir je vous propose un mini framework de test en Haskell:
+Pour finir je vous propose un mini framework de test en Haskell, histoire de montrer un cas concret:
 
 [source,haskell]
 ----
@@ -324,6 +324,8 @@ On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on pe
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
 au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
 
-Je vous encourage vivement à apprendre la programmation fonctionnelle (avec Haskell en particulier, car vous serez contraint d'utiliser ce paradigme),
-pour vous améliorez en tant que développeur.
-Même si je continues à coder en Java au jour le jour, j'essaye de rendre mes fonctions le plus pure possible pour séparer aisément les calculs des effets.
+Je vous encourage vivement à apprendre la programmation fonctionnelle pour ajouter une nouvelle corde à votre arc.
+Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que vous aurez une autre approche de votre code.
+
+__Merci à la team LilleFP pour la relecture__
+
