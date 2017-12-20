@@ -208,7 +208,7 @@ Les `a` et `b` dans la signature ne sont pas des variables mais des types polymo
 Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petit et composable.
 Personnellement je vois ça comme des lego, des centaines de petites pièces qui ne peuvent rien seule, mais dés qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
 
-On peut également composer des fonctions, on à alors une nouvelle fonction:
+On peut également composer des fonctions, on a alors une nouvelle fonction:
 
 [source,haskell]
 ----
@@ -219,7 +219,7 @@ On peut également composer des fonctions, on à alors une nouvelle fonction:
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`, que se passe t-il à l'intérieur ?
+On voit qu'elle prend 3 fonctions en paramètres et retourne une fonction une valeur de type (polymorphe) `c`, que se passe t-il à l'intérieur ?
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
@@ -257,15 +257,20 @@ reverseGreet s = (greetings . reverse) s
 ----
 
 On indique que l'on a un paramètre `s` auquel on applique la fonction (composée) ``(greetings . reverse)``.
-Saviez-vous que l'on pouvait se passer du paramètre ?
-En tout cas ne pas l'écrire ?
+Maintenant rappelez vous deux choses:
 
-Je vais vous demander un peu de souplesse mentale: une fonction étant une valeur elle a un type, du moment qu'elle à une valeur du bon type tout ira bien, donc:
+* le type de `.` c'est `(b -> c) -> (a -> b) -> a -> c` 
+* une fonction peut en retourner une
 
-* Quel est le type de `reverseGreet` ? `String -> String`.
-* Quel est le type de `greetings . reverse` ? `String -> String`.
+Donc si au lieu de dire 
 
-A partir de là on peut simplement écrire
+> `.` est une fonction à trois paramètres: deux fonctions et une valeur de type `a` retournant une valeur de type `c`
+
+on disait
+
+> `.` est une fonction prenant deux fonctions et retournant une fonction, comme ceci `(b -> c) -> (a -> b) -> (a -> c)`
+
+Alors on pourrait écrire `reverseGreet` comme ceci
 
 [source,haskell]
 ----
@@ -273,7 +278,11 @@ reverseGreet :: String -> String
 reverseGreet = greetings . reverse
 ----
 
-Plus besoin de paramètre. 
+Plus de paramètres !
+Rien de magique la dedans, encore moins d'une fonctionnalité d'Haskell, il faut vraiment voir les fonctions comme des valeurs.
+Au final ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
+Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
+
 Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 
 == Mon framework de test à moi
