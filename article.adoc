@@ -31,7 +31,7 @@ Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
 
 On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
 Pourquoi me direz-vous ?
-Haskell est un langage fonctionnel et sa syntaxe me permettra de vous montrer quelque bienfait de la programmation fonctionnelle.
+Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmtion fonctionnelle plus facilement qu'avec Java.
 
 .Un peu de syntaxe 
 [options="header", cols="1,1a,1a"]
@@ -103,7 +103,7 @@ On peut intervertir leurs usages:
 [cols="1,1a,1a"]
 |===
 ||en postfix | en infix
-|fonction postfix
+|fonction __postfix__
 |
 [source,haskell]
 ----
@@ -114,7 +114,7 @@ add 1 2
 ----
 1 `add` 2
 ----
-|fonction infix
+|fonction __infix__
 |
 [source,haskell]
 ----
@@ -219,7 +219,8 @@ On peut également composer des fonctions, on a alors une nouvelle fonction:
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 3 fonctions en paramètres et retourne une fonction une valeur de type (polymorphe) `c`, que se passe t-il à l'intérieur ?
+On voit qu'elle prend en paramètres deux fonctions et une valeur et retourne une valeur de type `c`.
+Que se passe-t-il quand on applique une fonction __composée__ ? 
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
@@ -237,14 +238,21 @@ L'ordre peut paraître contre intuitif, mais implémentons notre propre fonction
 include::{samplesdir}/compose.hs[]
 
 -- à l'éxécution
-λ> greetings s = "Hello " ++ s
 λ> (compose greetings reverse) "dlrow"
 "Hello world"
 ----
 
 Dans notre exemple, comment fait on pour composer ? 
-On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres,
-d'abord `f x` puis son résultat est passé à `g`.
+On applique `g` sur le résultat de `f x`.
+Si on met en parallèle les deux versions
+
+[source,haskell]
+----
+(g . f) x 
+ g ( f  x )
+----
+
+J'ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.
 
 == Libérez les paramètres
 
