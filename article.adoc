@@ -129,9 +129,21 @@ f . g
 
 == Un peu d'épice pour relevez le gout ?
 
-Pour faire une lambda à plusieurs paramètres, on fait comme ceci : ``\x -> \y -> x + y``.
+Pour faire une lambda à plusieurs paramètres, on fait comme ceci : 
+
+[source,haskell]
+----
+\x -> \y -> x + y
+----
+
 On a une lambda qui contient une lambda.
-On vient ici de faire quelque chose de très intéressant, un petit indice d'abord ``\x -> (\y -> x + y)``.
+On vient ici de faire quelque chose de très intéressant, un petit indice d'abord:
+
+[source,haskell]
+----
+\x -> (\y -> x + y)
+----
+
 Toujours pas ?
 Alors je viens d'isoler la lambda `\y -> x + y`, ceci nous indique qu'une fonction peut en retourner une autre, on parle alors de **higher order function**.
 On peut se dire qu'il s'agit :
@@ -210,6 +222,10 @@ Personnellement je vois ça comme des lego, des centaines de petites pièces qui
 
 On peut également composer des fonctions, on a alors une nouvelle fonction:
 
+====
+si on a une fonction `a -> b` et une autre `b -> c` alors on peut en faire une fonction `a -> c`
+====
+
 [source,haskell]
 ----
 λ> greetings s = "Hello " ++ s
@@ -287,7 +303,7 @@ reverseGreet = greetings . reverse
 ----
 
 Plus de paramètres !
-Rien de magique la dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explication: 
+Rien de magique la dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
 ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
 Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
 
