@@ -118,18 +118,19 @@ add 1 2
 |
 [source,haskell]
 ----
-(.) f g
+(+) 1 2
 ----
 |
 [source,haskell]
 ----
-f . g
+1 + 2
 ----
 |===
 
 == Un peu d'épice pour relevez le gout ?
 
-Pour faire une lambda à plusieurs paramètres, on fait comme ceci : 
+On a vu comment faire une lambda à un paramètre et pour plusieurs paramètres ?
+On fait comme ceci : 
 
 [source,haskell]
 ----
@@ -268,7 +269,7 @@ Si on met en parallèle les deux versions
  g ( f  x )
 ----
 
-J'ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.
+__J'ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.__
 
 == Libérez les paramètres
 
@@ -346,10 +347,10 @@ image::result.png[align="center"]
 
 On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on peut aisément manipuler. 
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
-au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
+au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les composer...
 
 Je vous encourage vivement à apprendre la programmation fonctionnelle pour ajouter une nouvelle corde à votre arc.
-Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que vous aurez une autre approche de votre code.
+Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que cela vous apportera une autre approche de votre code.
 
 __Merci à la team LilleFP pour la relecture__
 

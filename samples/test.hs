@@ -27,8 +27,8 @@ describe label tests =
         unlines report        
 
 -- génère une icone selon le résultat du test
-shellIcon :: Bool -> String -- <6>
-shellIcon True  = "✔"
+shellIcon :: Bool -> String
+shellIcon True  = "✔" -- <6>
 shellIcon False = "✘"
         
 shellColor :: Bool -> String
