@@ -96,14 +96,14 @@ add x y = x + y
 [TIP]
 J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci] pour exécuter le code, c'est un REPL pour Haskell.
 
-Haskell permet de __placer__ une fonction soit avant ses paramètres (postfix) ou entre (infix). 
-Les fonctions alphanumériques seront postfix et celles dont le nom est un ou des symboles (`.`, `>>`) seront infix.
+Haskell permet de __placer__ une fonction soit avant ses paramètres (prefixe) ou entre (infixe). 
+Les fonctions alphanumériques seront prefixe et celles dont le nom est un ou des symboles (`.`, `>>`) seront infixe.
 On peut intervertir leurs usages:
 
 [cols="1,1a,1a"]
 |===
-||en postfix | en infix
-|fonction __postfix__
+||en prefixe | en infeix
+|fonction __prefixe__
 |
 [source,haskell]
 ----
@@ -114,7 +114,7 @@ add 1 2
 ----
 1 `add` 2
 ----
-|fonction __infix__
+|fonction __infixe__
 |
 [source,haskell]
 ----
@@ -350,7 +350,7 @@ La programmation fonctionnelle propose un nouveau challenge car on change de par
 au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les composer...
 
 Je vous encourage vivement à apprendre la programmation fonctionnelle pour ajouter une nouvelle corde à votre arc.
-Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que cela vous apportera une autre approche de votre code.
+Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que vous aurez une autre approche de votre code.
 
 __Merci à la team LilleFP pour la relecture__
 
