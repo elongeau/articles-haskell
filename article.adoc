@@ -255,7 +255,7 @@ include::{samplesdir}/compose.hs[]
 "Hello world"
 ----
 
-Dans notre exemple, comment fait on pour composer ? 
+Dans notre exemple, comment fait-on pour composer ? 
 On applique `g` sur le résultat de `f x`.
 Si on met en parallèle les deux versions
 
@@ -269,7 +269,7 @@ __J'ai volontairement rajouté des espaces pour montrer que les paramètres sont
 
 == Libérez les paramètres
 
-Pour construire la fonction `reverseGreet` qu'a t'on fait ?
+Pour construire la fonction `reverseGreet` qu'a-t-on fait ?
 
 [source,haskell]
 ----
@@ -278,7 +278,7 @@ reverseGreet s = (greetings . reverse) s
 ----
 
 On indique que l'on a un paramètre `s` auquel on applique la fonction (composée) ``(greetings . reverse)``.
-Maintenant rappelez vous deux choses:
+Maintenant rappelez-vous deux choses:
 
 * le type de `.` c'est `(b -> c) -> (a -> b) -> a -> c` 
 * une fonction peut en retourner une
@@ -300,7 +300,7 @@ reverseGreet = greetings . reverse
 ----
 
 Plus de paramètres !
-Rien de magique là dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
+Rien de magique là-dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
 ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
 Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
 
@@ -315,12 +315,12 @@ Pour finir je vous propose un mini framework de test en Haskell, histoire de mon
 include::{samplesdir}/test.hs[]
 ----
 
-<1> On défini un **type alias**: `UnitTest` est un synonyme pour le type `() -> (Bool, String)` soit une fonction qui produira une paire contenant un `Bool` et une `String`.
+<1> On définit un **type alias**: `UnitTest` est un synonyme pour le type `() -> (Bool, String)` soit une fonction qui produira une paire contenant un `Bool` et une `String`.
 Le `()` est le tuple vide: un type `()` ayant pour seule valeur `()` (oui c'est troublant au début).
 
 <2> Une valeur de type `UnitTest` doit être une fonction, la fonction `test` retourne donc une lambda.
 Le `let ... in` est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d'avoir un illisible __one-liner__)
-Vous remarquerez que pour éxécuter le test on lui passe la valeur `()`.
+Vous remarquerez que pour éxecuter le test on lui passe la valeur `()`.
 
 <3> On applique partiellement `map` avec juste une lambda, on obtient alors une fonction `[UnitTest] -> [(Bool,String)]`.
 Vous avez vu ? `UnitTest` est une fonction, on peut donc également construire des listes de fonctions !
@@ -332,10 +332,10 @@ Ici on passe la valeur `tests` à la fonction composée `map format . runTests`.
 
 <6> Un exemple de http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif[**pattern matching**].
 
-On a ici un mini-framework de test (certes limité) en quelque lignes.
-Vous pourrez constatez qu'on se base juste sur la syntaxe et des fonctions (et du pattern matching mais difficile de s'en passer).
+On a ici un mini-framework de test (certes limité) en quelques lignes.
+Vous pourrez constater qu'on se base juste sur la syntaxe et des fonctions (et du pattern matching mais difficile de s'en passer).
 
-Ci-dessous un exemple d'éxécution:
+Ci-dessous un exemple d'exécution:
 
 image::result.png[align="center"]
 
