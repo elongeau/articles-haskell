@@ -30,7 +30,7 @@ Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
 
 On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
 Pourquoi me direz-vous ?
-Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmtion fonctionnelle plus facilement qu'avec Java.
+Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmation fonctionnelle plus facilement qu'avec Java.
 
 .Un peu de syntaxe 
 [options="header", cols="1,1a,1a"]
