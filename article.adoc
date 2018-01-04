@@ -1,6 +1,6 @@
 = C'est quoi le fonctionnel dans programmation fonctionnelle ?
 :source-highlighter: pygments
-:pygments-style: manni
+:pygments-style: trac
 :icons: font
 :source-language: haskell
 :samplesdir: ./samples
@@ -222,10 +222,6 @@ Dans tout projet de développement, on cherche à faire des éléments (objet, p
 Personnellement je vois ça comme des legos, des centaines de petites pièces qui ne peuvent rien seule, mais dès qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
 
 On peut également composer des fonctions, on a alors une nouvelle fonction:
-
-====
-si on a une fonction `a -> b` et une autre `b -> c` alors on peut en faire une fonction `a -> c`
-====
 
 [source,haskell]
 ----
