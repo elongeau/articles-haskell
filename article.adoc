@@ -7,10 +7,9 @@
 :2c: ::
 :bq: `
 
-Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
-si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
-Mais Java (entre autre) reste attaché au paradigme objet.
-Partons donc à l'aventure au pays des fonctions et des lambdas.
+Depuis quelques années maintenant la programmation fonctionnelle a le vent en poupe,
+et vous avez certainement vu votre langage favori adopter certaines particularités de la programmation fonctionnelle (pour n'en cité qu'une: les lambdas).
+Mais ces ajouts ne changent pas le paradigme original du langage, partons donc à l'aventure au pays des fonctions et des lambdas.
 
 == Dis papa c'est quoi une lambda ?
 
@@ -127,9 +126,10 @@ add 1 2
 ----
 |===
 
-== Un peu d'épice pour relevez le gout ?
+== Un peu d'épice pour relever le gout ?
 
-On a vu comment faire une lambda à un paramètre et pour plusieurs paramètres ?
+On a vu comment faire une lambda à un paramètre. 
+Et pour plusieurs paramètres ?
 On fait comme ceci : 
 
 [source,haskell]
@@ -218,8 +218,8 @@ Les `a` et `b` dans la signature ne sont pas des variables mais des types polymo
 
 == Une fonction plus une fonction égale... une fonction
 
-Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petit et composable.
-Personnellement je vois ça comme des lego, des centaines de petites pièces qui ne peuvent rien seule, mais dés qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
+Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petits et composables.
+Personnellement je vois ça comme des legos, des centaines de petites pièces qui ne peuvent rien seule, mais dès qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
 
 On peut également composer des fonctions, on a alors une nouvelle fonction:
 
@@ -304,7 +304,7 @@ reverseGreet = greetings . reverse
 ----
 
 Plus de paramètres !
-Rien de magique la dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
+Rien de magique là dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
 ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
 Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
 
