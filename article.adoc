@@ -102,7 +102,7 @@ On peut intervertir leurs usages:
 
 [cols="1,1a,1a"]
 |===
-||en prefixe | en infeix
+||en prefixe | en infixe
 |fonction __prefixe__
 |
 [source,haskell]
