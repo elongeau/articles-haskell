@@ -1,301 +1,352 @@
-= Introduction à la programmation fonctionnelle (avec Haskell)
+= C'est quoi le fonctionnel dans programmation fonctionnelle ?
 :source-highlighter: pygments
-:pygments-style: manni
+:pygments-style: trac
 :icons: font
 :source-language: haskell
 :samplesdir: ./samples
+:2c: ::
+:bq: `
 
-Depuis quelques années maintenant la programmation fonctionnelle à le vent en poupe,
-si comme moi vous êtes un javaiste vous avez vu l'arrivée des lambdas.
-Mais Java (entre autre) reste attaché au paradigme objet.
-Partons donc à la découverte de la programmation fonctionnelle avec un langage qui s'en revendique pleinement : https://www.haskell.org/[Haskell]
+Depuis quelques années maintenant la programmation fonctionnelle a le vent en poupe,
+et vous avez certainement vu votre langage favori adopter certaines particularités de la programmation fonctionnelle (pour n'en cité qu'une: les lambdas).
+Mais ces ajouts ne changent pas le paradigme original du langage, partons donc à l'aventure au pays des fonctions et des lambdas.
 
-== Bon, déjà c'est quoi la __"programmation fonctionnelle"__ ?
+== Dis papa c'est quoi une lambda ?
 
-Si on va au plus simple, il s'agit de considérer une fonction comme n'importe quelle autre valeur.
+Une lambda c'est tout simplement une fonction anonyme, ça passera mieux avec un exemple:
 
+[source,java]
+----
+include::{samplesdir}/Lambda.java[]
+----
+
+Ici on utilise l'API Stream de Java 8 pour doubler chaque nombre du `Stream`.
+`map` applique successivement la lambda `x -> x * 2` à chaque élément du `Stream`.
+
+L'intérêt d'utiliser une lambda ici est de fournir un comportement à exécuter.
+Comment et quand celui-ci sera appliqué dépendra de l'appelant (ici `map`).
+
+== Les fonctions en Haskell
+
+On va maintenant partir sur des exemples en https://www.haskell.org/[Haskell].
+Pourquoi me direz-vous ?
+Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmation fonctionnelle plus facilement qu'avec Java.
+
+.Un peu de syntaxe 
+[options="header", cols="1,1a,1a"]
+|===
+|Description | Code |Utilisation 
+
+| une valeur
+|
 [source,haskell]
 ----
-include::{samplesdir}/fun-as-value.hs[]
+i :: Int
+i = 42
 ----
-
-[NOTE]
-.Valeur vs variable
-====
-Lorsque que l'on travail avec un language prônant l'immutabilité il vaut mieux parler de valeur plutôt que de variable, 
-car la définition même de variable implique que quelque chose change, ce qui est en contradiction avec l'immutabilité.
-Donc par la suite je vais parler de valeur.
-====
-
-Comme on le voit la déclaration d'une valeur et d'une fonction sont identique, Haskell ne fait pas la distinction, en fait une fonction est une valeur.
-On dit alors des fonctions qu'elles sont des __first class citizen__, car tout ce qu'on peut faire avec un `Int` ou une `String` on peut le faire avec une fonction,
-et c'est de ça dont on va parler par la suite mais avant:
-
-
-== Aparté sur les lambdas
-
-C'est quoi une lambda ? c'est une fonction anonyme tout simplement.
-En Haskell on les écrit ainsi ``\x y -> x + y``.
-
-Si vous voulez utiliser la même lambda plusieurs fois il vous faudra la nommée: ``add = \x y -> x + y``, 
-vous pourrez alors utiliser `add` plutôt que re-écrire la lambda partout.
-
-D'ailleurs Haskell propose du __sucre syntaxique__ pour cela : 
-
+|
 [source,haskell]
 ----
+λ> i
+42
+----
+
+|une fonction
+|
+[source,haskell]
+----
+f :: String -> String
+f s = "Hello " ++ s
+----
+|
+[source,haskell]
+----
+λ> f "World"
+"Hello World"
+----
+
+|une fonction à plusieurs paramètres
+|
+[source,haskell]
+----
+add :: Int -> Int -> Int
 add x y = x + y
 ----
+|
+[source,haskell]
+----
+λ> add 1 2
+3
+----
 
-Bravo on vient de montrer qu'une fonction et une lambda c'est la même chose, on pourra d'ailleurs remplacer l'une par l'autre sans soucis.
+| une lambda
+|
+[source,haskell]
+----
+\x -> x * x
+----
+|
+[source,haskell]
+----
+\λ> (\x -> x * x) 2
+4
+----
+|===
+[TIP]
+J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci] pour exécuter le code, c'est un REPL pour Haskell.
 
-== Fonction de haut niveau
+Haskell permet de __placer__ une fonction soit avant ses paramètres (__prefix__) ou entre (__infix__). 
+Les fonctions alphanumériques seront __prefix__ et celles dont le nom est un ou des symboles seront __infix__.
+On peut intervertir leurs usages:
 
-On désigne par cette terminologie les fonctions qui prennent en argument et/ou retournent une fonction,
-par exemple:
+[cols="1,1a,1a"]
+|===
+||en __prefix__ | en __infix__
+|fonction __prefix__
+|
+[source,haskell]
+----
+add 1 2
+----
+|
+[source,haskell]
+----
+1 `add` 2
+----
+|fonction __infix__
+|
+[source,haskell]
+----
+(+) 1 2
+----
+|
+[source,haskell]
+----
+1 + 2
+----
+|===
+
+== Un peu d'épice pour relever le gout ?
+
+On a vu comment faire une lambda à un paramètre. 
+Et pour plusieurs paramètres ?
+On fait comme ceci : 
 
 [source,haskell]
 ----
-include::{samplesdir}/fun-as-arg.hs[]
+\x -> \y -> x + y
 ----
+
+On a une lambda qui contient une lambda.
+On vient ici de faire quelque chose de très intéressant, un petit indice d'abord:
+
+[source,haskell]
+----
+\x -> (\y -> x + y)
+----
+
+Toujours pas ?
+Alors je viens d'isoler la lambda `\y -> x + y`, ceci nous indique qu'une fonction peut en retourner une autre, on parle alors de **higher order function**.
+On peut se dire qu'il s'agit :
+
+* soit d'une fonction à *deux* paramètres retournant une valeur.
+* soit d'une fonction à *un* paramètre retournant une fonction à *un* paramètre retournant une *valeur*.
+
+Ce dernier concept s'appelle le **currying**, il consiste à considérer qu'une fonction n'aura toujours qu'un seul paramètre et une seule valeur de retour.
+En fait une fonction à plusieurs paramètres c'est une fonction à un paramètre retournant une fonction à un paramètre et ainsi de suite jusqu'au résultat final.
+
+La syntaxe Haskell permet nativement le currying :
+
+[source,haskell]
+----
+include::{samplesdir}/concat.hs[]
+-- dans le REPL:
+λ> join "Hello " "World" -- <1>
+"Hello World"
+λ> greetings = join "Hello " -- <2>
+λ> :t greetings
+greetings :: String -> String -- <3>
+λ> greetings "FP" -- <4>
+"Hello FP"
+λ> greetings "Currying"
+"Hello Currying"
+----
+
+<1> on l'utilise normalement
+<2> on ne passe que le premier argument et on assigne la fonction restante
+<3> la fonction restante est ``String -> String`` : c'est ce qu'on attendait (dans le REPL `:t` nous donne le type d'une valeur)
+<4> on peut utiliser la nouvelle fonction comme n'importe quelle autre
+
+Lorsque l'on ne passe pas tous ces arguments à une fonction on dit qu'on l'**applique partiellement**
+
+[TIP]
+====
+Accessoirement, pour avoir une lambda à plusieurs paramètres on peut tout à fait l'écrire ``\x y -> x + y``, c'est juste du sucre syntaxique.
+====
+
+== Une fonction dans la fonction
+
+Vous vous souvenez du premier exemple en Java ? 
+On passait une lambda à la fonction `map`, il s'agit aussi d'une **higher order function**: on passe une fonction comme paramètre d'une autre.
+
+Un petit exemple en haskell bien entendu:
+
+[source,haskell]
+----
+λ> map (\x -> x * 2) [1,2,3]
+[ 2, 4, 6 ]
+----
+
+On entoure la lambda de parenthèses sinon le compilateur ne saura pas où elle s'arrête !
+`[1,2,3]` est la liste d'entier.
+
+Si vous voulez faire vos propres fonctions prenant une (ou des, soyons fous) fonction il faut feinter, regardons la signature de `map`:
+
+[source,haskell]
+----
+λ> :t map
+map :: (a -> b) -> [a] -> [b]
+----
+
+Il faut, une nouvelle fois, cerner la fonction avec des parenthèses.
+`map` est donc une fonction prenant une fonction (de type `a -> b`) et une liste puis retourne une liste.
 
 [NOTE]
-.Un peu de syntaxe
 ====
-* `IO ()` : il s'agit du moyen par lequel Haskell produit un effet, ici écrire sur la console (on y reviendra, promis).
-* `repeatMe f count` : la syntaxe haskell impose de rappeller le nom de la fonction suivi de ces arguments nommés.
+Les `a` et `b` dans la signature ne sont pas des variables mais des types polymorphes, cela veut dire que l'on pourra les remplacer par n'importe quel type.
 ====
 
-[source,haskell]
-.à l'éxécution
-----
-λ> repeatMe (\x -> show x) 5
-"5"
-"4"
-"3"
-"2"
-"1"
-----
-Maintenant regardons comment retourner une fonction:
+== Une fonction plus une fonction égale... une fonction
+
+Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction...) petits et composables.
+Personnellement je vois ça comme des legos, des centaines de petites pièces qui ne peuvent rien seule, mais dès qu'on les assemble comme il faut on peut obtenir ce qu'on veut.
+
+On peut également composer des fonctions, on a alors une nouvelle fonction:
 
 [source,haskell]
 ----
-include::{samplesdir}/return-fun.hs[]
-----
-
-On retourne la lambda (une fonction anonyme) `\s -> s ++ (show sum)`
-
-[source,haskell]
-.à l'éxécution
-----
-λ> f = logAdd 1 2
-λ> f "1 + 2 = "
-----
-
-On passe la `String` `"1 + 2 = "` à la fonction retourner par `logAdd 1 2`
-
-On peut également se passer de la valeur temporaire `f` et écrire
-
-[source,haskell]
-----
-λ> logAdd 1 2 "1 + 2 = "
-"1 + 2 = 3"
-----
-
-> Etrange, ça ressemble à appliquer des paramètres à une fonction normale
-
-Tout à fait, retourner une fonction revient à avoir une fonction à laquelle on ne donne pas tous ces paramètres. 
-Dans ce cas la valeur retournée est une fonction attendant le reste des paramètres, on peut donc réécrire notre fonction comme ceci:
-
-[source,haskell]
-----
-include::{samplesdir}/return-fun-2.hs[]
-
--- dans le REPL
-
-λ> f = logAdd 1 2
-λ> :t f -- le ":t" permet d'avoir le type d'une valeur.
-f :: String -> String
-λ> f "1 + 2 = "
-"1 + 2 = 3"
--- mais on aurait aussi pu faire
-λ> g = logAdd 1
-λ> :t g
-g :: Int -> String -> String
-λ> g 2 "1 + 2 = "
-"1 + 2 = 3"
--- soyons fou : ne donnons aucun paramètre !
-λ> h = logAdd
--- on a assigné à h la valeur logAdd
-λ> :t h
-h :: Int -> Int -> String -> String
-λ> h 1 2 "1 + 2 = "
-"1 + 2 = 3"
-----
-
-Le fait de séparer les paramètres d'une fonction s'appelle le **currying**,
-l'idée est de considérer que toutes les fonctions n'ont qu'un seul paramètre et retourne une valeur:
-
-* une fonction à 1 paramètre retourne une valeur
-* une fonction à __2 paramètres__ est une fonction à 1 paramètre retournant une fonction à 1 paramètre
-* ...
-* une fonction à __N paramètres__ est une fonction à 1 paramètre retournant une fonction à 1 paramètre retournant une fonction... que retourne une valeur.
-
-[NOTE]
-Avec Haskell le **currying** est natif, il n'y a pas de notion de _groupe_ de paramètres,
-mais pour la compréhension on parlera __des paramètres__ d'une fonction.
-
-
-== Composition
-
-Un des trucs fun de la programmation fonctionnelle c'est de composer des fonctions.
-On prend 2 fonctions et on en fait qu'une seule
-
-[source,haskell,linenums]
-----
-λ> f s = reverse s
-λ> g s = "Hello " ++ s
-λ> h s = (g . f) s
-λ> h "dlrow"
+λ> greetings s = "Hello " ++ s
+λ> reverseGreet s = (greetings . reverse) s
+λ> reverseGreet "dlrow"
 "Hello world"
 ----
 
 Ce qui nous intéresse ici c'est la fonction `.` (lisez _compose_), voici sa signature: `(b -> c) -> (a -> b) -> a -> c`.
-On voit qu'elle prend 2 fonctions en paramètres et retourne une fonction `a -> c`,
-quand celle-ci est appliqué:
+On voit qu'elle prend en paramètres deux fonctions et une valeur et retourne une valeur de type `c`.
+Que se passe-t-il quand on applique une fonction __composée__ ? 
 
 . elle passe son paramètre de type `a` à la fonction `a -> b` (le deuxième paramètre de `.`)
 . la valeur produite, de type `b`, est alors fourni à la fonction `b -> c` qui produit le résultat final
 
 [TIP]
 ====
-Quand vous voyez des `a` et `b` dans la signature d'une fonction c'est que celle-ci est polymorphique (dans le corps de la fonction ce sera une valeur).
-En Java on parlera de __générique__ : `<A>`.
+Pourquoi appeler la fonction de composition `.` ?
+Parce qu'en notation mathématique la composition s'écrit `∘`
 ====
 
-l'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
+L'ordre peut paraître contre intuitif, mais implémentons notre propre fonction `compose`:
 
 [source,haskell]
 ----
 include::{samplesdir}/compose.hs[]
 
 -- à l'éxécution
-λ> f s = reverse s
-λ> g s = "Hello " ++ s
-λ> (compose g f) "dlrow"
+λ> (compose greetings reverse) "dlrow"
 "Hello world"
 ----
 
-Dans notre exemple, comment fait on pour composer ? 
-On applique nos fonctions dans une lambda: `\x -> g (f x)` et là on retrouve l'ordre de nos paramètres, d'abord `f x` puis son résultat est passé à `g`.
-
-== Manipuler des fonctions comme n'importe quelle autre valeur
-
-Si une fonction est une valeur comme une autre on peut la manipuler comme n'importe quelle autre valeur.
-Par exemple en mettre dans une liste:
+Dans notre exemple, comment fait-on pour composer ? 
+On applique `g` sur le résultat de `f x`.
+Si on met en parallèle les deux versions
 
 [source,haskell]
 ----
-include::{samplesdir}/fun-in-list.hs[]
+(g . f) x 
+ g ( f  x )
 ----
- 
-Regardons de plus près à la fonction `run`,
-`map` prend 2 paramètres : une fonction et une liste.
-Chaque élément de la liste est fourni comme paramètre à la fonction.
-Dans notre cas la fonction est la lambda `\f -> f "world"`,
-les éléments de la liste étant des fonctions, `f` en est une, on lui passe alors le paramètre `"world"`.
+
+__J'ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.__
+
+== Libérez les paramètres
+
+Pour construire la fonction `reverseGreet` qu'a-t-on fait ?
 
 [source,haskell]
-.à l'éxécution
 ----
-λ> run
-[ "dlrow"
-, "Hello world"
-]
+reverseGreet :: String -> String
+reverseGreet s = (greetings . reverse) s
 ----
 
-== Pureté et effet
+On indique que l'on a un paramètre `s` auquel on applique la fonction (composée) ``(greetings . reverse)``.
+Maintenant rappelez-vous deux choses:
 
-Maintenant qu'on sait manipuler des fonctions, attardons nous sur la notion de **pureté**.
-Une fonction pure calcule son résultat uniquement depuis ces arguments et sans produire d'effet.
-Voici quelques exemples de fonction pure et non pure pour vous faire une idée:
+* le type de `.` c'est `(b -> c) -> (a -> b) -> a -> c` 
+* une fonction peut en retourner une
 
-[source,haskell,linenums]
+Donc si au lieu de dire 
+
+> `.` est une fonction à trois paramètres: deux fonctions et une valeur de type `a` retournant une valeur de type `c`
+
+on disait
+
+> `.` est une fonction prenant deux fonctions et retournant une fonction, comme ceci `(b -> c) -> (a -> b) -> (a -> c)`
+
+Alors on pourrait écrire `reverseGreet` comme ceci
+
+[source,haskell]
 ----
-include::{samplesdir}/pure.hs[]
-
--- exécutons tout ça
-λ> add 1 2
-3
-λ> answer "Answer to the Ultimate Question of Life, the Universe, and Everything"
-"Answer to the Ultimate Question of Life, the Universe, and Everything is 42"
-λ> greetings
-world
-Hello world
-----
-
-[TIP]
-====
-[quote,, 'https://fr.wikipedia.org/wiki/Transparence_r%C3%A9f%C3%A9rentielle[wiki]']
-La transparence référentielle est une propriété des expressions d'un langage de programmation qui fait qu'une expression peut être remplacée par son résultat sans changer le comportement du programme.
-
-Dans notre cas l'expression `i` vaut `42` (et ça ne changera pas) on peut donc mettre `42` partout où l'on trouve `i` sans affecter le programme.
-====
-
-Un autre type d'effet est celui où l'on modifie un des paramètres de la fonction,
-comme avec Haskell tout est immuable je vais vous montrer du code Java:
-
-[source,java]
-----
-int addAndAppend(final List<Integer> ints) {
-    // sommer les éléments de la liste
-    final int res = ints.stream()
-            .mapToInt(Integer::intValue) // converti un Integer en int
-            .sum();
-
-    // ajouter 3 a la liste : on n'est pas pur !!
-    ints.add(3);
-
-    return res;
-}
+reverseGreet :: String -> String
+reverseGreet = greetings . reverse
 ----
 
-L'intérêt d'une fonction pure est de tout avoir sous la main, de là découle plusieurs avantages:
+Plus de paramètres !
+Rien de magique là-dedans, encore moins une obscure fonctionnalité d'Haskell, quelques explications: 
+ce qu'on veut c'est qu'en face du nom `reverseGreet` il y est une expression de type `String -> String` et `greetings . reverse` convient tout à fait.
+Il n'y a donc pas besoin d'indiquer explicitement un paramètre.
 
-* il sera beaucoup plus facile de comprendre ce que fait une fonction pure.
-* le résultat dépendant uniquement de ces paramètres, rappeler la même fonction avec les mêmes paramètres produira le même résultat.
+Ce style de notation est dit https://wiki.haskell.org/Pointfree[**point free**], on n'écrit plus les paramètres on décrit plutôt le flux de transformation des données.
 
+== Mon framework de test à moi
 
-[NOTE]
-.Un peu d'immuabilité dans vos fonctions pures ?
-====
-Sans trop rentrer dans les détails, il faut que les paramètres de la fonction pure soit immuable.
-Si un autre processus modifie un des paramètres pendant son utilisation la fonction ne sera plus très pure.
-====
+Pour finir je vous propose un mini framework de test en Haskell, histoire de montrer un cas concret:
 
-Concernant les défauts, il y en a un gros, bien que très utile une fonction pure ne nous sert pas à grand chose seule.
+[source,haskell]
+----
+include::{samplesdir}/test.hs[]
+----
 
-A un moment donné il faut bien fournir un résultat à l'utilisateur (écrire sur la console par exemple), on parle alors d'**effet**.
-Voyez un effet comme toute interaction de votre programme avec le monde extérieur: lire depuis la console, un service REST...
+<1> On définit un **type alias**: `UnitTest` est un synonyme pour le type `() -> (Bool, String)` soit une fonction qui produira une paire contenant un `Bool` et une `String`.
+Le `()` est le tuple vide: un type `()` ayant pour seule valeur `()` (oui c'est troublant au début).
 
-Selon le langage l'utilisation des effets sera différente, à titre d'exemple en Haskell une fonction avec un effet utilisera le type `IO`, le système de types nous aide à distinguer les deux.
-Par contre Scala sera plus __permissif__ (pas de critique j'aime beaucoup Scala) et ce sera au développeur de bien séparer les fonctions pure des effets car il n'y aura aucune contrainte au niveau du système de types.
+<2> Une valeur de type `UnitTest` doit être une fonction, la fonction `test` retourne donc une lambda.
+Le `let ... in` est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d'avoir un illisible __one-liner__)
+Vous remarquerez que pour éxecuter le test on lui passe la valeur `()`.
 
-[NOTE]
-.vous reprendrez bien un peu d'``IO`` ?
-====
-Le type `IO` représente un effet, c'est un type polymorphique, par exemple la fonction `getLine` qui demande une saisie de l'utilisateur à le type `IO String`, soit un effet qui produira une `String`.
-La fonction `print` retourne une valeur de type `IO ()`, `()` est ici le type qui représente **aucune valeur**, `print` ne produit seulement qu'un effet.
+<3> On applique partiellement `map` avec juste une lambda, on obtient alors une fonction `[UnitTest] -> [(Bool,String)]`.
+Vous avez vu ? `UnitTest` est une fonction, on peut donc également construire des listes de fonctions !
 
-Il y a plein d'autre choses à dire sur `IO` mais ce n'est pas le but de cet article elles seront donc passées sous silence.
-====
+<4> Le `$` est une fonction (`($) {2c} (a -> b) -> a -> b`) qui passe la valeur à sa droite à la fonction à sa gauche, c'est un moyen pratique d'éviter ceci : `(map format . runTests) tests`.
+Ici on passe la valeur `tests` à la fonction composée `map format . runTests`.
 
-== Pour finir
+<5> la fonction `:` (`(:) {2c} a -> [a] -> [a]`) ajoute une valeur au début d'une liste.
 
-On a vu que dans un langage fonctionnel, une fonction est une valeur comme une autre que l'on peut aisément manipuler. 
+<6> Un exemple de http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif[**pattern matching**].
+
+On a ici un mini-framework de test (certes limité) en quelques lignes.
+Vous pourrez constater qu'on se base juste sur la syntaxe et des fonctions (et du pattern matching mais difficile de s'en passer).
+
+Ci-dessous un exemple d'exécution:
+
+image::result.png[align="center"]
+
+== Function for ever
+
+On a vu que dans un langage fonctionnel, une fonction est une valeur que l'on peut aisément manipuler. 
 La programmation fonctionnelle propose un nouveau challenge car on change de paradigme, 
-au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les enchainer...
+au délà d'apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les composer...
 
-Je vous encourage vivement à apprendre la programmation fonctionnelle (avec Haskell en particulier, car vous serez contraint d'utiliser ce paradigme),
-pour vous améliorez en tant que développeur.
-Même si je continues à coder en Java au jour le jour, j'essaye de rendre mes fonctions le plus pure possible pour séparer aisément les calculs des effets.
+Je vous encourage vivement à apprendre la programmation fonctionnelle pour ajouter une nouvelle corde à votre arc.
+Même si comme moi vous n'utilisez pas un langage strictement fonctionnel au jour le jour j'espère que vous aurez une autre approche de votre code.
+
+__Merci à la team LilleFP pour la relecture__
+

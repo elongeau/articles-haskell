@@ -17,6 +17,7 @@ after_failure:
   - docker logs asciidoc-to-html
 
 after_success:      
+  - cp *.png output
   - cd output 
   - git init
   - git config user.name "${GH_USER_NAME}"
