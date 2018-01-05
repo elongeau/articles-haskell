@@ -95,14 +95,14 @@ add x y = x + y
 [TIP]
 J'utilise https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html[ghci] pour exécuter le code, c'est un REPL pour Haskell.
 
-Haskell permet de __placer__ une fonction soit avant ses paramètres (préfixe) ou entre (infixe). 
-Les fonctions alphanumériques seront préfixe et celles dont le nom est un ou des symboles seront infixe.
+Haskell permet de __placer__ une fonction soit avant ses paramètres (__prefix__) ou entre (__infix__). 
+Les fonctions alphanumériques seront __prefix__ et celles dont le nom est un ou des symboles seront __infix__.
 On peut intervertir leurs usages:
 
 [cols="1,1a,1a"]
 |===
-||en préfixe | en infixe
-|fonction __préfixe__
+||en __prefix__ | en __infix__
+|fonction __prefix__
 |
 [source,haskell]
 ----
@@ -113,7 +113,7 @@ add 1 2
 ----
 1 `add` 2
 ----
-|fonction __infixe__
+|fonction __infix__
 |
 [source,haskell]
 ----
