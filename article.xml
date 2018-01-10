@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>C&#8217;est quoi le fonctionnel dans programmation fonctionnelle ?</title>
+<date>2018-01-10</date>
+</info>
+<simpara>Depuis quelques années maintenant la programmation fonctionnelle a le vent en poupe,
+et vous avez certainement vu votre langage favori adopter certaines particularités de la programmation fonctionnelle (pour n&#8217;en cité qu&#8217;une: les lambdas).
+Mais ces ajouts ne changent pas le paradigme original du langage, partons donc à l&#8217;aventure au pays des fonctions et des lambdas.</simpara>
+<section xml:id="_dis_papa_c_est_quoi_une_lambda">
+<title>Dis papa c&#8217;est quoi une lambda ?</title>
+<simpara>Une lambda c&#8217;est tout simplement une fonction anonyme, ça passera mieux avec un exemple:</simpara>
+<programlisting language="java" linenumbering="unnumbered">public class LambdaSample {
+    public static void main(String... args) {
+        final List&lt;Integer&gt; res = Stream.of(1, 2, 3, 4) //
+                .map(x -&gt; x * 2) //
+                .collect(Collectors.toList());
+
+        System.out.println(res);
+
+    }
+}</programlisting>
+<simpara>Ici on utilise l&#8217;API Stream de Java 8 pour doubler chaque nombre du <literal>Stream</literal>.
+<literal>map</literal> applique successivement la lambda <literal>x &#8594; x * 2</literal> à chaque élément du <literal>Stream</literal>.</simpara>
+<simpara>L&#8217;intérêt d&#8217;utiliser une lambda ici est de fournir un comportement à exécuter.
+Comment et quand celui-ci sera appliqué dépendra de l&#8217;appelant (ici <literal>map</literal>).</simpara>
+</section>
+<section xml:id="_les_fonctions_en_haskell">
+<title>Les fonctions en Haskell</title>
+<simpara>On va maintenant partir sur des exemples en <link xl:href="https://www.haskell.org/">Haskell</link>.
+Pourquoi me direz-vous ?
+Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmation fonctionnelle plus facilement qu&#8217;avec Java.</simpara>
+<table frame="all" rowsep="1" colsep="1">
+<title>Un peu de syntaxe</title>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="33.3333*"/>
+<colspec colname="col_2" colwidth="33.3333*"/>
+<colspec colname="col_3" colwidth="33.3334*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Description</entry>
+<entry align="left" valign="top">Code</entry>
+<entry align="left" valign="top">Utilisation</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>une valeur</simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">i :: Int
+i = 42</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">λ&gt; i
+42</programlisting></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>une fonction</simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">f :: String -&gt; String
+f s = "Hello " ++ s</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">λ&gt; f "World"
+"Hello World"</programlisting></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>une fonction à plusieurs paramètres</simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">add :: Int -&gt; Int -&gt; Int
+add x y = x + y</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">λ&gt; add 1 2
+3</programlisting></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>une lambda</simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">\x -&gt; x * x</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">\λ&gt; (\x -&gt; x * x) 2
+4</programlisting></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<tip>
+<simpara>J&#8217;utilise <link xl:href="https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html">ghci</link> pour exécuter le code, c&#8217;est un REPL pour Haskell.</simpara>
+</tip>
+<simpara>Haskell permet de <emphasis>placer</emphasis> une fonction soit avant ses paramètres (<emphasis>prefix</emphasis>) ou entre (<emphasis>infix</emphasis>).
+Les fonctions alphanumériques seront <emphasis>prefix</emphasis> et celles dont le nom est un ou des symboles seront <emphasis>infix</emphasis>.
+On peut intervertir leurs usages:</simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="33.3333*"/>
+<colspec colname="col_2" colwidth="33.3333*"/>
+<colspec colname="col_3" colwidth="33.3334*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"><simpara>en <emphasis>prefix</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara>en <emphasis>infix</emphasis></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>fonction <emphasis>prefix</emphasis></simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">add 1 2</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">1 `add` 2</programlisting></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>fonction <emphasis>infix</emphasis></simpara></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">(+) 1 2</programlisting></entry>
+<entry align="left" valign="top"><programlisting language="haskell" linenumbering="unnumbered">1 + 2</programlisting></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_un_peu_d_épice_pour_relever_le_gout">
+<title>Un peu d&#8217;épice pour relever le gout ?</title>
+<simpara>On a vu comment faire une lambda à un paramètre.
+Et pour plusieurs paramètres ?
+On fait comme ceci :</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">\x -&gt; \y -&gt; x + y</programlisting>
+<simpara>On a une lambda qui contient une lambda.
+On vient ici de faire quelque chose de très intéressant, un petit indice d&#8217;abord:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">\x -&gt; (\y -&gt; x + y)</programlisting>
+<simpara>Toujours pas ?
+Alors je viens d&#8217;isoler la lambda <literal>\y &#8594; x + y</literal>, ceci nous indique qu&#8217;une fonction peut en retourner une autre, on parle alors de <emphasis role="strong">higher order function</emphasis>.
+On peut se dire qu&#8217;il s&#8217;agit :</simpara>
+<itemizedlist>
+<listitem>
+<simpara>soit d&#8217;une fonction à <emphasis role="strong">deux</emphasis> paramètres retournant une valeur.</simpara>
+</listitem>
+<listitem>
+<simpara>soit d&#8217;une fonction à <emphasis role="strong">un</emphasis> paramètre retournant une fonction à <emphasis role="strong">un</emphasis> paramètre retournant une <emphasis role="strong">valeur</emphasis>.</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Ce dernier concept s&#8217;appelle le <emphasis role="strong">currying</emphasis>, il consiste à considérer qu&#8217;une fonction n&#8217;aura toujours qu&#8217;un seul paramètre et une seule valeur de retour.
+En fait une fonction à plusieurs paramètres c&#8217;est une fonction à un paramètre retournant une fonction à un paramètre et ainsi de suite jusqu&#8217;au résultat final.</simpara>
+<simpara>La syntaxe Haskell permet nativement le currying :</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">join :: String -&gt; String -&gt; String
+join a b = a ++ b
+-- dans le REPL:
+λ&gt; join "Hello " "World" <co xml:id="CO1-1"/>
+"Hello World"
+λ&gt; greetings = join "Hello " <co xml:id="CO1-2"/>
+λ&gt; :t greetings
+greetings :: String -&gt; String <co xml:id="CO1-3"/>
+λ&gt; greetings "FP" <co xml:id="CO1-4"/>
+"Hello FP"
+λ&gt; greetings "Currying"
+"Hello Currying"</programlisting>
+<calloutlist>
+<callout arearefs="CO1-1">
+<para>on l&#8217;utilise normalement</para>
+</callout>
+<callout arearefs="CO1-2">
+<para>on ne passe que le premier argument et on assigne la fonction restante</para>
+</callout>
+<callout arearefs="CO1-3">
+<para>la fonction restante est <literal>String &#8594; String</literal> : c&#8217;est ce qu&#8217;on attendait (dans le REPL <literal>:t</literal> nous donne le type d&#8217;une valeur)</para>
+</callout>
+<callout arearefs="CO1-4">
+<para>on peut utiliser la nouvelle fonction comme n&#8217;importe quelle autre</para>
+</callout>
+</calloutlist>
+<simpara>Lorsque l&#8217;on ne passe pas tous ces arguments à une fonction on dit qu&#8217;on l'<emphasis role="strong">applique partiellement</emphasis></simpara>
+<tip>
+<simpara>Accessoirement, pour avoir une lambda à plusieurs paramètres on peut tout à fait l&#8217;écrire <literal>\x y &#8594; x + y</literal>, c&#8217;est juste du sucre syntaxique.</simpara>
+</tip>
+</section>
+<section xml:id="_une_fonction_dans_la_fonction">
+<title>Une fonction dans la fonction</title>
+<simpara>Vous vous souvenez du premier exemple en Java ?
+On passait une lambda à la fonction <literal>map</literal>, il s&#8217;agit aussi d&#8217;une <emphasis role="strong">higher order function</emphasis>: on passe une fonction comme paramètre d&#8217;une autre.</simpara>
+<simpara>Un petit exemple en haskell bien entendu:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">λ&gt; map (\x -&gt; x * 2) [1,2,3]
+[ 2, 4, 6 ]</programlisting>
+<simpara>On entoure la lambda de parenthèses sinon le compilateur ne saura pas où elle s&#8217;arrête !
+<literal>[1,2,3]</literal> est la liste d&#8217;entier.</simpara>
+<simpara>Si vous voulez faire vos propres fonctions prenant une (ou des, soyons fous) fonction il faut feinter, regardons la signature de <literal>map</literal>:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">λ&gt; :t map
+map :: (a -&gt; b) -&gt; [a] -&gt; [b]</programlisting>
+<simpara>Il faut, une nouvelle fois, cerner la fonction avec des parenthèses.
+<literal>map</literal> est donc une fonction prenant une fonction (de type <literal>a &#8594; b</literal>) et une liste puis retourne une liste.</simpara>
+<note>
+<simpara>Les <literal>a</literal> et <literal>b</literal> dans la signature ne sont pas des variables mais des types polymorphes, cela veut dire que l&#8217;on pourra les remplacer par n&#8217;importe quel type.</simpara>
+</note>
+</section>
+<section xml:id="_une_fonction_plus_une_fonction_égale_une_fonction">
+<title>Une fonction plus une fonction égale&#8230;&#8203; une fonction</title>
+<simpara>Dans tout projet de développement, on cherche à faire des éléments (objet, procédure, fonction&#8230;&#8203;) petits et composables.
+Personnellement je vois ça comme des legos, des centaines de petites pièces qui ne peuvent rien seule, mais dès qu&#8217;on les assemble comme il faut on peut obtenir ce qu&#8217;on veut.</simpara>
+<simpara>On peut également composer des fonctions, on a alors une nouvelle fonction:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">λ&gt; greetings s = "Hello " ++ s
+λ&gt; reverseGreet s = (greetings . reverse) s
+λ&gt; reverseGreet "dlrow"
+"Hello world"</programlisting>
+<simpara>Ce qui nous intéresse ici c&#8217;est la fonction <literal>.</literal> (lisez <emphasis>compose</emphasis>), voici sa signature: <literal>(b &#8594; c) &#8594; (a &#8594; b) &#8594; a &#8594; c</literal>.
+On voit qu&#8217;elle prend en paramètres deux fonctions et une valeur et retourne une valeur de type <literal>c</literal>.
+Que se passe-t-il quand on applique une fonction <emphasis>composée</emphasis> ?</simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>elle passe son paramètre de type <literal>a</literal> à la fonction <literal>a &#8594; b</literal> (le deuxième paramètre de <literal>.</literal>)</simpara>
+</listitem>
+<listitem>
+<simpara>la valeur produite, de type <literal>b</literal>, est alors fourni à la fonction <literal>b &#8594; c</literal> qui produit le résultat final</simpara>
+</listitem>
+</orderedlist>
+<tip>
+<simpara>Pourquoi appeler la fonction de composition <literal>.</literal> ?
+Parce qu&#8217;en notation mathématique la composition s&#8217;écrit <literal>∘</literal></simpara>
+</tip>
+<simpara>L&#8217;ordre peut paraître contre intuitif, mais implémentons notre propre fonction <literal>compose</literal>:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">compose :: (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+compose g f x = g (f x)
+
+-- à l'éxécution
+λ&gt; (compose greetings reverse) "dlrow"
+"Hello world"</programlisting>
+<simpara>Dans notre exemple, comment fait-on pour composer ?
+On applique <literal>g</literal> sur le résultat de <literal>f x</literal>.
+Si on met en parallèle les deux versions</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">(g . f) x
+ g ( f  x )</programlisting>
+<simpara><emphasis>J&#8217;ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.</emphasis></simpara>
+</section>
+<section xml:id="_libérez_les_paramètres">
+<title>Libérez les paramètres</title>
+<simpara>Pour construire la fonction <literal>reverseGreet</literal> qu&#8217;a-t-on fait ?</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">reverseGreet :: String -&gt; String
+reverseGreet s = (greetings . reverse) s</programlisting>
+<simpara>On indique que l&#8217;on a un paramètre <literal>s</literal> auquel on applique la fonction (composée) <literal>(greetings . reverse)</literal>.
+Maintenant rappelez-vous deux choses:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>le type de <literal>.</literal> c&#8217;est <literal>(b &#8594; c) &#8594; (a &#8594; b) &#8594; a &#8594; c</literal></simpara>
+</listitem>
+<listitem>
+<simpara>une fonction peut en retourner une</simpara>
+</listitem>
+</itemizedlist>
+<simpara>Donc si au lieu de dire</simpara>
+<blockquote>
+<simpara><literal>.</literal> est une fonction à trois paramètres: deux fonctions et une valeur de type <literal>a</literal> retournant une valeur de type <literal>c</literal></simpara>
+</blockquote>
+<simpara>on disait</simpara>
+<blockquote>
+<simpara><literal>.</literal> est une fonction prenant deux fonctions et retournant une fonction, comme ceci <literal>(b &#8594; c) &#8594; (a &#8594; b) &#8594; (a &#8594; c)</literal></simpara>
+</blockquote>
+<simpara>Alors on pourrait écrire <literal>reverseGreet</literal> comme ceci</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">reverseGreet :: String -&gt; String
+reverseGreet = greetings . reverse</programlisting>
+<simpara>Plus de paramètres !
+Rien de magique là-dedans, encore moins une obscure fonctionnalité d&#8217;Haskell, quelques explications:
+ce qu&#8217;on veut c&#8217;est qu&#8217;en face du nom <literal>reverseGreet</literal> il y est une expression de type <literal>String &#8594; String</literal> et <literal>greetings . reverse</literal> convient tout à fait.
+Il n&#8217;y a donc pas besoin d&#8217;indiquer explicitement un paramètre.</simpara>
+<simpara>Ce style de notation est dit <link xl:href="https://wiki.haskell.org/Pointfree"><emphasis role="strong">point free</emphasis></link>, on n&#8217;écrit plus les paramètres on décrit plutôt le flux de transformation des données.</simpara>
+</section>
+<section xml:id="_mon_framework_de_test_à_moi">
+<title>Mon framework de test à moi</title>
+<simpara>Pour finir je vous propose un mini framework de test en Haskell, histoire de montrer un cas concret:</simpara>
+<programlisting language="haskell" linenumbering="unnumbered">type UnitTest =  () -&gt; (Bool, String)
+
+-- une fonction pour construire des UnitTests
+test :: String -&gt; (() -&gt; Bool) -&gt; UnitTest
+test label testFun =
+    -- comme un UnitTest est une fonction on va retourner une lambda
+    -- l'intérêt est de laisser le framework de test décider quand éxécuter le test
+    \() -&gt;
+        let
+            -- on éxécute le test
+            testResult = testFun ()
+        in
+            -- on renvoi une paire (&lt;résultat du test&gt;, &lt;description du test&gt;)
+            (testResult, label)
+
+-- groupe et exécute des tests
+describe :: String -&gt; [UnitTest] -&gt; String
+describe label tests =
+    let
+        runTests = map (\test -&gt; test ())
+        -- exécute tous les test puis formate leur résultat
+        runAll = map format . runTests $ tests
+        -- ajoute le descriptif tu groupe
+        report = label : runAll
+    in
+        -- formate le tout
+        unlines report
+
+-- génère une icone selon le résultat du test
+shellIcon :: Bool -&gt; String
+shellIcon True  = "✔"
+shellIcon False = "✘"
+
+shellColor :: Bool -&gt; String
+shellColor True  = "\x1b[32m"
+shellColor False = "\x1b[31m"
+
+-- formate le résultat d'un test
+format :: (Bool, String) -&gt; String
+format (result, label) =
+    let
+        startColor = shellColor result
+        icon = shellIcon result
+        resetColor = "\x1b[0m"
+    in
+        "  " ++ startColor ++ label ++ " " ++ icon ++ resetColor
+
+-- On lance nos tests
+main =
+    putStrLn $ describe "addition" [
+        test "1 + 1 == 2" (\() -&gt; 1 + 1 == 2),
+        test "2 + 2 == 4" (\() -&gt; 2 + 2 == 4),
+        test "2 + 1 == 4" (\() -&gt; False)
+    ]</programlisting>
+<variablelist>
+<varlistentry>
+<term><literal>type UnitTest =  () &#8594; (Bool, String)</literal> </term>
+<listitem>
+<simpara>On définit un <emphasis role="strong">type alias</emphasis>: <literal>UnitTest</literal> est un synonyme pour le type <literal>() &#8594; (Bool, String)</literal> soit une fonction qui produira une paire contenant un <literal>Bool</literal> et une <literal>String</literal>.
+Le <literal>()</literal> est le tuple vide: un type <literal>()</literal> ayant pour seule valeur <literal>()</literal> (oui c&#8217;est troublant au début).</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>test :: String &#8594; (() &#8594; Bool) &#8594; UnitTest</literal> </term>
+<listitem>
+<simpara>Une valeur de type <literal>UnitTest</literal> doit être une fonction, la fonction <literal>test</literal> retourne donc une lambda.
+Le <literal>let &#8230;&#8203; in</literal> est une expression qui permet de définir des calculs intermédiaires et de les nommer (plutôt que d&#8217;avoir un illisible <emphasis>one-liner</emphasis>)
+Vous remarquerez que pour éxecuter le test on lui passe la valeur <literal>()</literal>.</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><literal>runTests = map (\test &#8594; test ())</literal> </term>
+<listitem>
+<simpara>On applique partiellement <literal>map</literal> avec juste une lambda, on obtient alors une fonction <literal>[UnitTest] &#8594; [(Bool,String)]</literal>.
+Vous avez vu ? <literal>UnitTest</literal> est une fonction, on peut donc également construire des listes de fonctions !</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>La fonction <literal>($) :: (a &#8594; b) &#8594; a &#8594; b</literal>) </term>
+<listitem>
+<simpara>Elle passe la valeur à sa droite à la fonction à sa gauche, c&#8217;est un moyen pratique d&#8217;éviter ceci : <literal>(map format . runTests) tests</literal>.
+Ici on passe la valeur <literal>tests</literal> à la fonction composée <literal>map format . runTests</literal>.</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>La fonction <literal>:</literal> (<literal>(:) :: a &#8594; [a] &#8594; [a]</literal>) </term>
+<listitem>
+<simpara>Elle ajoute une valeur au début d&#8217;une liste.</simpara>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Dans <literal>shellIcon</literal> </term>
+<listitem>
+<simpara>On utilise le <link xl:href="http://lyah.haskell.fr/syntaxe-des-fonctions#filtrage-par-motif"><emphasis role="strong">pattern matching</emphasis></link> pour trouver l&#8217;icône à afficher</simpara>
+</listitem>
+</varlistentry>
+</variablelist>
+<simpara>On a ici un mini-framework de test (certes limité) en quelques lignes.
+Vous pourrez constater qu&#8217;on se base juste sur la syntaxe et des fonctions (et du pattern matching mais difficile de s&#8217;en passer).</simpara>
+<simpara>Ci-dessous un exemple d&#8217;exécution:</simpara>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="result.png" align="center"/>
+</imageobject>
+<textobject><phrase>result</phrase></textobject>
+</mediaobject>
+</informalfigure>
+</section>
+<section xml:id="_function_for_ever">
+<title>Function for ever</title>
+<simpara>On a vu que dans un langage fonctionnel, une fonction est une valeur que l&#8217;on peut aisément manipuler.
+La programmation fonctionnelle propose un nouveau challenge car on change de paradigme,
+au délà d&#8217;apprendre une nouvelle syntaxe il faut réussir à penser en terme de fonction: quand les injecter, les composer&#8230;&#8203;</simpara>
+<simpara>Je vous encourage vivement à apprendre la programmation fonctionnelle pour ajouter une nouvelle corde à votre arc.
+Même si comme moi vous n&#8217;utilisez pas un langage strictement fonctionnel au jour le jour j&#8217;espère que vous aurez une autre approche de votre code.</simpara>
+<simpara><emphasis>Merci à la team LilleFP pour la relecture</emphasis></simpara>
+</section>
+</article>
