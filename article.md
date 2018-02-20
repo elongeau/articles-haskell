@@ -1,24 +1,17 @@
 Depuis quelques années maintenant la programmation fonctionnelle a le vent en poupe, et vous avez certainement vu votre langage favori adopter certaines particularités de la programmation fonctionnelle. Mais ces ajouts ne changent pas le paradigme original du langage, partons donc à l’aventure au pays des fonctions et des lambdas.
 
-# Dis papa c’est quoi une lambda ? 
+# Dis papa c'est quoi la programmation fonctionnelle ?
 
-Une lambda c’est tout simplement une fonction anonyme, ça passera mieux avec un exemple:
+Avant d'entrer dans le vif du sujet il faut définir ce qu'est la programmation fonctionnelle: c'est un paradigme de programmation où l'on va favoriser l'approche déclarative et l'usage de fonctions mathématique (argh des maths !!).
 
-```java
-public class LambdaSample {
-    public static void main(String... args) {
-        final List<Integer> res = Stream.of(1, 2, 3, 4) 
-                .map(x -> x * 2) 
-                .collect(Collectors.toList());
+Le déclaratif (en opposition à l'impératif) consiste à décrire le but d'un programme pas comment l'atteindre, par exemple si vous allez au restaurant:
 
-        System.out.println(res);
-    }
-}
-```
+* impératif: faire 10 pas jusqu'a la réception, tourner à droite, faire 5 pas, s'assoir à table
+* déclaratif: aller à la réception, demander une table
 
-Ici on utilise l’API Stream de Java 8 pour doubler chaque nombre du `Stream`. `map` applique successivement la lambda `x → x * 2` à chaque élément du `Stream`.
+En impératif on dit à notre programme comment faire les choses, instruction par instruction, alors qu'un programme déclaratif va décrire les étapes à suivre sans préciser comment les réaliser.
 
-L’intérêt d’utiliser une lambda ici est de fournir un comportement à exécuter. Comment et quand celui-ci sera appliqué dépendra de l’appelant (ici `map`).
+Le coté fonction mathématique indique une caractéristique des fonctions: celles-ci ne se base que sur leur paramètre d'entrée pour calculer un résultat.
 
 # Les fonctions en Haskell 
 
