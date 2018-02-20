@@ -2,7 +2,7 @@ Depuis quelques années maintenant la programmation fonctionnelle a le vent en p
 
 # Dis papa c'est quoi la programmation fonctionnelle ?
 
-Avant d'entrer dans le vif du sujet il faut définir ce qu'est la programmation fonctionnelle: c'est un paradigme de programmation où l'on va favoriser l'approche déclarative et l'usage de fonctions mathématique (argh des maths !!).
+Avant d'entrer dans le vif du sujet il faut définir ce qu'est la programmation fonctionnelle: c'est un paradigme de programmation où l'on va favoriser l'approche déclarative et l'usage de fonctions.
 
 Le déclaratif (en opposition à l'impératif) consiste à décrire le but d'un programme pas comment l'atteindre, par exemple si vous allez au restaurant:
 
@@ -11,7 +11,7 @@ Le déclaratif (en opposition à l'impératif) consiste à décrire le but d'un 
 
 En impératif on dit à notre programme comment faire les choses, instruction par instruction, alors qu'un programme déclaratif va décrire les étapes à suivre sans préciser comment les réaliser.
 
-Le coté fonction mathématique indique une caractéristique des fonctions: celles-ci ne se base que sur leur paramètre d'entrée pour calculer un résultat.
+L'aspect usage des fonctions mathématique indique que l'on va les utiliser comme brique de base du programme et c'est de cela dont on va parler.
 
 # Les fonctions en Haskell 
 
