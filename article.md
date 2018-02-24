@@ -2,61 +2,52 @@ Depuis quelques années maintenant la programmation fonctionnelle a le vent en p
 
 # Dis papa c'est quoi la programmation fonctionnelle ?
 
-Avant d'entrer dans le vif du sujet il faut définir ce qu'est la programmation fonctionnelle: c'est un paradigme de programmation où l'on va favoriser l'approche déclarative et l'usage de fonctions.
+Avant d'entrer dans le vif du sujet il faut définir ce qu'est la programmation fonctionnelle: c'est un paradigme de programmation où l'on va utiliser des fonctions mathématiques.
+Donc c'est quoi une fonction mathématique ? C'est une fonction qui pour un ensemble d'entrées (paramètres) fournira un même résultat.
+Imaginez une `Map`, pour une clé donnée on aura une et une seule valeur, les paramètres de la fonction c'est la clé et le résultat c'est la valeur, une fonction mathématique c'est juste une `Map` entre des arguments et un résultat.
 
-Le déclaratif (en opposition à l'impératif) consiste à décrire le but d'un programme pas comment l'atteindre, par exemple si vous allez au restaurant:
+Cette nature implique plusieurs choses:
 
-* impératif: faire 10 pas jusqu'a la réception, tourner à droite, faire 5 pas, s'assoir à table
-* déclaratif: aller à la réception, demander une table
+* on peut facilement raisonner sur une fonction mathématique (mêmes arguments, même résultat).
+* la fonction ne dépend que de ces arguments, donc pas d'état global, pas de lecture dans un fichier, base de donnée...
+* la seule chose que produit la fonction c'est sa valeur de retour, oubliez les logs ou l'écriture dans un fichier.
 
-En impératif on dit à notre programme comment faire les choses, instruction par instruction, alors qu'un programme déclaratif va décrire les étapes à suivre sans préciser comment les réaliser.
+# Petite introduction à Haskell
 
-L'aspect usage des fonctions mathématique indique que l'on va les utiliser comme brique de base du programme et c'est de cela dont on va parler.
-
-# Les fonctions en Haskell 
-
-On va maintenant partir sur des exemples en [Haskell](https://www.haskell.org/).
+Pour la suite de l'article on va partir sur des exemples en [Haskell](https://www.haskell.org/).
 Pourquoi me direz-vous ? 
-Haskell est un langage fonctionnel et sa syntaxe permettra de mettre en avant certains concepts de programmation fonctionnelle plus facilement qu’avec Java.
+Haskell est un langage fonctionnel, on ne pourra donc pas faire autrement qu'utiliser des fonctions.
+
+> Les exemples ci dessous seront exécuté avec [GHCi](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html), c'est un REPL pour Haskell (fourni lors de l'installation)
 
 ### Une valeur
 
 ```haskell
-i :: Int
-i = 42
--- Dans le REPL
-λ> i
+Prelude> i = 42
+Prelude> i
 42
 ``` 
 
 ### Une fonction
 
 ```haskell
-f :: String -> String
-f s = "Hello " ++ s
--- Dans le REPL
-λ> f "World"
-"Hello World"
+Prelude> greetings name = "Hello " ++ name
+Prelude> greetings "world"
+"Hello world"
 ``` 
 
 ### Une fonction à plusieurs paramètres
 ```haskell
-add :: Int -> Int -> Int
-add x y = x + y
--- Dans le REPL
-λ> add 1 2
+Prelude> add x y = x + y
+Prelude> add 1 2
 3
 ```  
 
 ### Une lambda
 ```haskell
-\x -> x * x
--- Dans le REPL
-λ> (\x -> x * x) 2
-4
+Prelude> (\x -> x * 2) 1
+2
 ```
-
-> J’utilise [ghci](https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html) pour exécuter le code, c’est un REPL pour Haskell.
 
 Haskell permet de *placer* une fonction soit avant ses paramètres (*prefix*) ou entre (*infix*). Les fonctions alphanumériques seront *prefix* et celles dont le nom est un ou des symboles seront *infix*. On peut intervertir leurs usages:
 
@@ -102,7 +93,7 @@ On a une lambda qui contient une lambda. On vient ici de faire quelque chose de 
 \x -> (\y -> x + y)
 ```
 
-Toujours pas ? Alors je viens d’isoler la lambda `\y → x + y`, ceci nous indique qu’une fonction peut en retourner une autre, on parle alors de **higher order function**. On peut se dire qu’il s’agit :
+Toujours pas ? Alors je viens d’isoler la lambda `\y → x + y`, ceci nous indique qu’une fonction peut en retourner une autre, on parle alors de **fonction de haut niveau**. On peut se dire qu’il s’agit :
 
 - soit d’une fonction à **deux** paramètres retournant une valeur.
 
@@ -139,9 +130,7 @@ Lorsque l’on ne passe pas tous ces arguments à une fonction on dit qu’on l'
 
 # Une fonction dans la fonction 
 
-Vous vous souvenez du premier exemple en Java ? On passait une lambda à la fonction `map`, il s’agit aussi d’une **higher order function**: on passe une fonction comme paramètre d’une autre.
-
-Un petit exemple en haskell bien entendu:
+Il s'agit de passer une fonction comme paramètre d'une autre, un petit exemple en Haskell bien entendu:
 
 ```haskell
 λ> map (\x -> x * 2) [1,2,3]
