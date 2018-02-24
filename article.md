@@ -9,7 +9,7 @@ Imaginez une `Map`, pour une clé donnée on aura une et une seule valeur, les p
 Cette nature implique plusieurs choses:
 
 * on peut facilement raisonner sur une fonction mathématique (mêmes arguments, même résultat).
-* la fonction ne dépend que de ces arguments, donc pas d'état global, pas de lecture dans un fichier, base de donnée...
+* la fonction ne dépend que de ces arguments, donc pas d'état global, pas de lecture dans un fichier ou une base de donnée...
 * la seule chose que produit la fonction c'est sa valeur de retour, oubliez les logs ou l'écriture dans un fichier.
 
 # Petite introduction à Haskell
@@ -47,36 +47,6 @@ Prelude> add 1 2
 ```haskell
 Prelude> (\x -> x * 2) 1
 2
-```
-
-Haskell permet de *placer* une fonction soit avant ses paramètres (*prefix*) ou entre (*infix*). Les fonctions alphanumériques seront *prefix* et celles dont le nom est un ou des symboles seront *infix*. On peut intervertir leurs usages:
-
-### Fonction _prefix_
-
-#### en _prefix_
-
-```haskell
-add 1 2
-```
-
-#### en _infix_
-
-```haskell
-1 `add` 2
-```
-
-### Fonction _infix_
-
-#### en _prefix_
-
-```haskell
-(+) 1 2
-```
-
-#### en _infix_
-
-```haskell
-1 + 2
 ```
 
 # Un peu d’épice pour relever le gout ? 
