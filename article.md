@@ -161,6 +161,8 @@ Dans notre exemple, comment fait-on pour composer ? On applique `g` sur le résu
 
 *J’ai volontairement rajouté des espaces pour montrer que les paramètres sont au même endroit.*
 
+> Vous aurez surement remarqué qu'on utilise `(.)` entre ces paramètres plutot qu'avant, c'est ce qu'on appelle la notation [infixe](https://wiki.haskell.org/Infix_operator), la notation standard (avant les paramètres) est dite **prefixe**
+
 # Libérez les paramètres 
 
 Pour construire la fonction `reverseGreet` qu’a-t-on fait ?
