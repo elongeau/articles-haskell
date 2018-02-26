@@ -23,29 +23,29 @@ Haskell est un langage fonctionnel, on ne pourra donc pas faire autrement qu'uti
 ### Une valeur
 
 ```haskell
-Prelude> i = 42
-Prelude> i
+λ> i = 42
+λ> i
 42
 ``` 
 
 ### Une fonction
 
 ```haskell
-Prelude> greetings name = "Hello " ++ name
-Prelude> greetings "world"
+λ> greetings name = "Hello " ++ name
+λ> greetings "world"
 "Hello world"
 ``` 
 
 ### Une fonction à plusieurs paramètres
 ```haskell
-Prelude> add x y = x + y
-Prelude> add 1 2
+λ> add x y = x + y
+λ> add 1 2
 3
 ```  
 
 ### Une lambda
 ```haskell
-Prelude> (\x -> x * 2) 1
+λ> (\x -> x * 2) 1
 2
 ```
 
