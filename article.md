@@ -49,6 +49,16 @@ Haskell est un langage fonctionnel, on ne pourra donc pas faire autrement qu'uti
 2
 ```
 
+Une lambda c'est juste une fonction anonyme, c'est très pratique quand on veux exprimer un calcul rapidement ou utiliser une fonction une seule fois. 
+
+On peut tout à fait écrire notre fonction `greetings` avec une lambda:
+
+```haskell
+λ> greetings = \name -> "Hello " ++ name
+λ> greetings "world"
+"Hello world"
+```
+
 # Un peu d’épice pour relever le gout ? 
 
 On a vu comment faire une lambda à un paramètre. Et pour plusieurs paramètres ? On fait comme ceci :
